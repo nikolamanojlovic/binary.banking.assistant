@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Domen.Konstante;
 
 namespace Domen
 {
-    public class Racun
+    public class Racun : IDomenskiObjekat
     {
         private long id;
         private String brojRacuna;
@@ -38,20 +37,19 @@ namespace Domen
             set { id = value; }
         }
 
-        public string RetrivePKFieldName()
+        public string VratiNazivPK()
         {
-            return Konstante.Konstante.
-            //return String.Concat(Konstante.T.PK_CLIENT_ID_FIELD, Konstante., Konstante.AccountTable.PK_ACCOUNT_ID_FIELD);
+            return String.Concat(Konstante.TabelaKlijent.PK_KLIJENT_ID, Konstante.Opste.ZAREZ, Konstante.TabelaRacun.PK_RACUN_ID);
         }
 
-        public string RetriveTableName()
+        public string VratiNazivTabele()
         {
-          //  return Constants.AccountTable.TABLE_NAME;
+            return Konstante.TabelaRacun.NAZIV_TABELE;
         }
 
-        public string RetriveValuesForInsertation()
+        public string VratiVrednostiZaUbacivanje()
         {
-          //  return String.Format(Constants.AccountTable.ACCOUNT_TABLE_INSERT, this.id, this.brojRacuna, this.tip, this.datumKreiranja.ToString(Constants.SQL.DATE_FORMAT));
+          return String.Format(Konstante.TabelaRacun.TABELA_RACUN_UBACI, this.id, this.brojRacuna, this.tip, this.datumKreiranja.ToString(Konstante.SQL.FORMAT_DATUMA));
         }
     }
 
@@ -61,5 +59,4 @@ namespace Domen
         EUR,
         USD
     }
-}
 }

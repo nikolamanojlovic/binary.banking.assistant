@@ -17,9 +17,11 @@ namespace Sesija
 
         public Broker ()
         {
-            Konekcija = new SqlConnection(@"");
-            Komanda = new SqlCommand();
-            Komanda.Connection = Konekcija;
+            Konekcija = new SqlConnection(@"server=localhost;user id=root;database=bba_bp");
+            Komanda = new SqlCommand
+            {
+                Connection = Konekcija
+            };
         }
 
         public static Broker DajInstancu()

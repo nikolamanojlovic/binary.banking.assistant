@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sesija
 {
     public class Broker
     {
-        public static Broker instanca;
+        public static Broker Instanca;
 
         public SqlConnection Konekcija;
         public SqlCommand Komanda;
@@ -28,11 +23,11 @@ namespace Sesija
 
         public static Broker DajInstancu()
         {
-            if ( instanca == null )
+            if (Instanca == null)
             {
                 return new Broker();
             }
-            return instanca;
+            return Instanca;
         }
 
         #region Konekcija i Transakcija
@@ -66,6 +61,7 @@ namespace Sesija
         #endregion
 
         #region Operacije nad bazom
+
         #endregion
     }
 }

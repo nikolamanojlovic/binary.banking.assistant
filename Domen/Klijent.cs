@@ -16,6 +16,7 @@ namespace Domen
         private String grad;
         private List<Racun> racuni;
 
+        #region Get, Set
         public List<Racun> Racuni
         {
             get { return racuni; }
@@ -75,6 +76,7 @@ namespace Domen
             get { return id; }
             set { id = value; }
         }
+        #endregion
 
         public string RetrivePK()
         {

@@ -14,6 +14,7 @@ namespace Domen
         private double kamata;
         private List<Rata> rata;
 
+        #region Get, Set
         public List<Rata> Rata
         {
             get { return rata; }
@@ -61,7 +62,8 @@ namespace Domen
             get { return klijent; }
             set { klijent = value; }
         }
-       
+        #endregion
+
         public string VratiNazivPK()
         {
             throw new NotImplementedException();

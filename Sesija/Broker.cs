@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,7 @@ namespace Sesija
         public SqlConnection Konekcija;
         public SqlCommand Komanda;
         public SqlDataReader Citac;
+        public SqlTransaction Transakcija;
 
         public Broker ()
         {
@@ -33,5 +35,32 @@ namespace Sesija
             return instanca;
         }
 
+        public void OtvoriKonekciju()
+        {
+            Konekcija.Open();
+        }
+
+        public void ZatvoriKonekciju()
+        {
+            if (Konekcija != null && Konekcija.State == ConnectionState.Open)
+            {
+                Konekcija.Close();
+            }
+        }
+
+        public void ZapocniTransakciju()
+        {
+            Transakcija = Konekcija.BeginTransaction();
+        }
+
+        public void PotvrdiTransakciju()
+        {
+            Transakcija.Commit();
+        }
+
+        public void PonistiTransakciju()
+        {
+            Transakcija.Rollback();
+        }
     }
 }

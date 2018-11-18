@@ -41,17 +41,17 @@ namespace Domen
             return this.id.ToString();
         }
 
-        public string VratiNazivPK()
+        public override string VratiNazivPK()
         {
             return Konstante.TabelaKlijent.PK_KLIJENT_ID;
         }
 
-        public string VratiNazivTabele()
+        public override string VratiNazivTabele()
         {
             return Konstante.TabelaKlijent.NAZIV_TABELE;
         }
 
-        public string VratiVrednostiZaUbacivanje()
+        public override string VratiVrednostiZaUbacivanje()
         {
             return String.Format(Konstante.TabelaKlijent.TABELA_KLIJENT_UBACI, this.id, this.jmbg, this.ime, this.prezime, this.mejl, this.telefon, this.ulica, this.brojKuce, this.grad);
         }

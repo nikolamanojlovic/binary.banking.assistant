@@ -5,16 +5,26 @@ using System;
 namespace SistemskeOperacije
 {
     public abstract class OpstaSO
-    {
+   {
+        private object rezultat;
+
+        #region Get, Set
+        public object Rezultat
+        {
+            get { return rezultat; }
+            set { rezultat = value; }
+        }
+        #endregion
+
         public bool IzvrsiSO(IDomenskiObjekat objekat)
         {
-            bool rezultat = false;
+            bool izvrseno = false;
             try
             {
                 Broker.DajInstancu().OtvoriKonekciju();
                 Broker.DajInstancu().ZapocniTransakciju();
-                rezultat = Izvrsi(objekat);
-                if (rezultat)
+                izvrseno = Izvrsi(objekat);
+                if (izvrseno)
                 {
                     Broker.DajInstancu().PotvrdiTransakciju();
                 }
@@ -22,7 +32,7 @@ namespace SistemskeOperacije
                 {
                     Broker.DajInstancu().PonistiTransakciju();
                 }
-                return rezultat;
+                return izvrseno;
             }
             catch (Exception)
             {

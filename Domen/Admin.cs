@@ -2,7 +2,7 @@
 
 namespace Domen
 {
-    public class Admin : Osoba, IDomenskiObjekat
+    public class Admin : Osoba
     {
         private string sifra;
 
@@ -14,19 +14,19 @@ namespace Domen
         }
         #endregion
 
-        public string VratiNazivPK()
+        public override string VratiNazivPK()
         {
             throw new NotImplementedException();
         }
 
-        public string VratiNazivTabele()
+        public override string VratiNazivTabele()
         {
             throw new NotImplementedException();
         }
 
-        public string VratiVrednostiZaUbacivanje()
+        public override string VratiVrednostiZaUbacivanje()
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }

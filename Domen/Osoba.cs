@@ -2,7 +2,7 @@
 
 namespace Domen
 {
-    public abstract class Osoba
+    public abstract class Osoba : IDomenskiObjekat
     {
         protected long id;
         protected String jmbg;
@@ -48,5 +48,9 @@ namespace Domen
             set { id = value; }
         }
         #endregion
+
+        public abstract string VratiNazivPK();
+        public abstract string VratiNazivTabele();
+        public abstract string VratiVrednostiZaUbacivanje();
     }
 }

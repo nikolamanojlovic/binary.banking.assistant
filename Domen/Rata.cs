@@ -8,6 +8,7 @@ namespace Domen
         private DateTime rokDospeca;
         private Transakcija transakcija;
 
+        #region Get, Set
         public Transakcija Transakcija
         {
             get { return transakcija; }
@@ -25,6 +26,7 @@ namespace Domen
             get { return rb; }
             set { rb = value; }
         }
+        #endregion
 
         public string VratiNazivPK()
         {

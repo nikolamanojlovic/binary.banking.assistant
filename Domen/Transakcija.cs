@@ -6,6 +6,7 @@
         private Racun primalac;
         private double iznos;
 
+        #region Get, Set
         public double Iznos
         {
             get { return iznos; }
@@ -23,6 +24,7 @@
             get { return posiljalac; }
             set { posiljalac = value; }
         }
+        #endregion
 
         public string VratiNazivPK()
         {

@@ -10,6 +10,7 @@ namespace Domen
         private double maxDug;
         private VremenskiOkvir vremenskiOkvir;
 
+        #region Get, Set
         public VremenskiOkvir VremenskiOkvir
         {
             get { return vremenskiOkvir; }
@@ -39,6 +40,7 @@ namespace Domen
             get { return naziv; }
             set { naziv = value; }
         }
+        #endregion
 
         public string VratiNazivPK()
         {

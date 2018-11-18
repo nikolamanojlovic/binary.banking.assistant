@@ -9,6 +9,7 @@ namespace Domen
         private TipRacuna tip;
         private DateTime datumKreiranja;
 
+        #region Get, Set
         public DateTime DatumKreiranja
         {
             get { return datumKreiranja; }
@@ -32,6 +33,7 @@ namespace Domen
             get { return id; }
             set { id = value; }
         }
+        #endregion
 
         public string VratiNazivPK()
         {

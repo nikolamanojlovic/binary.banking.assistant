@@ -35,6 +35,7 @@ namespace Sesija
             return instanca;
         }
 
+        #region Konekcija i Transakcija
         public void OtvoriKonekciju()
         {
             Konekcija.Open();
@@ -62,5 +63,9 @@ namespace Sesija
         {
             Transakcija.Rollback();
         }
+        #endregion
+
+        #region Operacije nad bazom
+        #endregion
     }
 }

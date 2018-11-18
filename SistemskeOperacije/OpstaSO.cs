@@ -6,7 +6,7 @@ namespace SistemskeOperacije
 {
     public abstract class OpstaSO
    {
-        private object rezultat;
+        protected object rezultat;
 
         #region Get, Set
         public object Rezultat

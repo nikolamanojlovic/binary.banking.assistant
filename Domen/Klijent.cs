@@ -3,14 +3,8 @@ using System.Collections.Generic;
 
 namespace Domen
 {
-    public class Klijent : IDomenskiObjekat
+    public class Klijent : Osoba, IDomenskiObjekat
     {
-        private long id;
-        private String jmbg;
-        private String ime;
-        private String prezime;
-        private String mejl;
-        private String telefon;
         private String ulica;
         private int brojKuce;
         private String grad;
@@ -39,42 +33,6 @@ namespace Domen
         {
             get { return ulica; }
             set { ulica = value; }
-        }
-
-        public String Telefon
-        {
-            get { return telefon; }
-            set { telefon = value; }
-        }
-
-        public String Mejl
-        {
-            get { return mejl; }
-            set { mejl = value; }
-        }
-
-        public String Prezime
-        {
-            get { return prezime; }
-            set { prezime = value; }
-        }
-
-        public String Ime
-        {
-            get { return ime; }
-            set { ime = value; }
-        }
-
-        public String JMBG
-        {
-            get { return jmbg; }
-            set { jmbg = value; }
-        }
-
-        public long ID
-        {
-            get { return id; }
-            set { id = value; }
         }
         #endregion
 

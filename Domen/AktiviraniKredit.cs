@@ -7,6 +7,7 @@ namespace Domen
     {
         private Klijent klijent;
         private TipKredita tipKredita;
+        private int brKredita;
         private DateTime datumUzimanja;
         private DateTime rokDospeca;
         private DateTime datumIsplate;
@@ -41,6 +42,12 @@ namespace Domen
         {
             get { return datumUzimanja; }
             set { datumUzimanja = value; }
+        }
+
+        public int BRKredita
+        {
+            get { return brKredita; }
+            set { brKredita = value; }
         }
 
         public TipKredita TipKredita

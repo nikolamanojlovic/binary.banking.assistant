@@ -10,8 +10,15 @@ namespace Domen
         protected String prezime;
         protected String mejl;
         protected String telefon;
+        private String sifra;
 
         #region Get, Set
+        public String Sifra
+        {
+            get { return sifra; }
+            set { sifra = value; }
+        }
+
         public String Telefon
         {
             get { return telefon; }

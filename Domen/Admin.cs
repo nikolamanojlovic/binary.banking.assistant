@@ -4,13 +4,13 @@ namespace Domen
 {
     public class Admin : Osoba
     {
-        private string sifra;
+        private string pozicija;
 
         #region Get, Set
-        public string Sifra
+        public string Pozicija
         {
-            get { return sifra; }
-            set { sifra = value; }
+            get { return pozicija; }
+            set { pozicija = value; }
         }
         #endregion
 

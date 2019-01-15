@@ -12,7 +12,7 @@ namespace SistemskeOperacije
     {
         protected override bool Izvrsi(IDomenskiObjekat objekat)
         {
-            return Broker.DajBrokera().Vrati();
+            return true;
         }
     }
 }

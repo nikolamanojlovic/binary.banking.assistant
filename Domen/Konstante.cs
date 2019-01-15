@@ -5,6 +5,7 @@
         public static class Opste
         {
             public static readonly string ZAREZ = ",";
+            public static readonly string CRNA_TACKA = "\u2022";
         }
 
         public static class SQL

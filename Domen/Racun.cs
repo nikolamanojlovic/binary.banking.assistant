@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace Domen
 {
@@ -10,6 +11,7 @@ namespace Domen
         private DateTime datumKreiranja;
 
         #region Get, Set
+        [DisplayName("Datum kreiranja")]
         public DateTime DatumKreiranja
         {
             get { return datumKreiranja; }
@@ -22,12 +24,14 @@ namespace Domen
             set { tip = value; }
         }
 
+        [DisplayName("Broj računa")]
         public String BrojRacuna
         {
             get { return brojRacuna; }
             set { brojRacuna = value; }
         }
 
+        [Browsable(false)]
         public long ID
         {
             get { return id; }

@@ -1,11 +1,10 @@
-﻿using Domen;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace KlijetAplikacija
+namespace ServerAplikacija
 {
     static class Program
     {
@@ -17,19 +16,11 @@ namespace KlijetAplikacija
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Prijava()
+            Application.Run(new ServerForma()
             {
                 FormBorderStyle = FormBorderStyle.FixedSingle,
                 StartPosition = FormStartPosition.CenterScreen
             });
-
-            /**
-             * new GlavnaFormaKlijent(new Klijent() { Ime = "Nikola", Prezime = "Manojlovc"})
-            {
-                FormBorderStyle = FormBorderStyle.FixedSingle,
-                StartPosition = FormStartPosition.CenterScreen
-            }
-             **/
         }
     }
 }

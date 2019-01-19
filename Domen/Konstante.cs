@@ -13,6 +13,20 @@
             public static readonly string FORMAT_DATUMA = "yyyy-MM-dd HH:mm:ss.fff";
         }
 
+        public static class GUI
+        {
+            public static readonly string GRESKA_NASLOV = "BBA - Binary Banking Assistant (GRESKA)";
+            public static readonly string INFO_NASLOV = "BBA - Binary Banking Assistant (INFO)";
+            public static readonly string GRESKA_TEKST = "Došlo je do greške. {0} ";
+            public static readonly string INFO_TEKS = "{0}";
+        }
+
+        public static class Server
+        {
+            public static readonly string LOCALHOST = "127.0.0.1";
+            public static readonly string SERVER_NIJE_DOSTUPAN = "Server nije dostupan, pokušajte kasnije!";
+        }
+
         public static class TabelaRacun
         {
             public static readonly string NAZIV_TABELE = "racun";

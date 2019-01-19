@@ -13,11 +13,11 @@ namespace KlijetAplikacija
 {
     public partial class GlavnaFormaKlijent : Form
     {
+        private const string INFO_TEKST = "Projekat iz predmeta Projektovanje Softvera (FON, 2019)";
 
-        private static readonly string INFO_NASLOV = "BBA - Binary Banking Assistant";
-        private static readonly string INFO_TEKST = "Projekat iz predmeta Projektovanje Softvera (FON, 2019)";
+        private Klijent klijent;
 
-        public GlavnaFormaKlijent(Klijent klijent)
+        public GlavnaFormaKlijent()
         {
             InitializeComponent();
 
@@ -33,7 +33,14 @@ namespace KlijetAplikacija
 
         private void lblRazvijeno_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(INFO_TEKST, INFO_NASLOV, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(String.Format(Konstante.GUI.INFO_TEKS, INFO_TEKST), Konstante.GUI.INFO_NASLOV, 
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        public Klijent Klijent
+        {
+            get { return klijent; }
+            set { klijent = value; }
         }
     }
 }

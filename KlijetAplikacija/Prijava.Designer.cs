@@ -30,37 +30,48 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Prijava));
             this.PictureLogo = new System.Windows.Forms.PictureBox();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.gbDobrodosli = new System.Windows.Forms.GroupBox();
+            this.txtSifra = new System.Windows.Forms.TextBox();
             this.txtMejl = new System.Windows.Forms.TextBox();
             this.lblSifra = new System.Windows.Forms.Label();
             this.lblMejl = new System.Windows.Forms.Label();
-            this.txtSifra = new System.Windows.Forms.TextBox();
+            this.btnPrijaviSe = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.PictureLogo)).BeginInit();
             this.gbDobrodosli.SuspendLayout();
             this.SuspendLayout();
             // 
             // PictureLogo
             // 
+            this.PictureLogo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.PictureLogo.Image = ((System.Drawing.Image)(resources.GetObject("PictureLogo.Image")));
-            this.PictureLogo.Location = new System.Drawing.Point(23, 32);
+            this.PictureLogo.Location = new System.Drawing.Point(12, 32);
             this.PictureLogo.Name = "PictureLogo";
-            this.PictureLogo.Size = new System.Drawing.Size(141, 104);
+            this.PictureLogo.Size = new System.Drawing.Size(155, 120);
             this.PictureLogo.TabIndex = 0;
             this.PictureLogo.TabStop = false;
             // 
             // gbDobrodosli
             // 
+            this.gbDobrodosli.Controls.Add(this.btnPrijaviSe);
             this.gbDobrodosli.Controls.Add(this.txtSifra);
             this.gbDobrodosli.Controls.Add(this.txtMejl);
             this.gbDobrodosli.Controls.Add(this.lblSifra);
             this.gbDobrodosli.Controls.Add(this.lblMejl);
             this.gbDobrodosli.Location = new System.Drawing.Point(184, 32);
             this.gbDobrodosli.Name = "gbDobrodosli";
-            this.gbDobrodosli.Size = new System.Drawing.Size(304, 100);
+            this.gbDobrodosli.Size = new System.Drawing.Size(302, 120);
             this.gbDobrodosli.TabIndex = 1;
             this.gbDobrodosli.TabStop = false;
             this.gbDobrodosli.Text = "Dobrodošli";
+            // 
+            // txtSifra
+            // 
+            this.txtSifra.Location = new System.Drawing.Point(50, 56);
+            this.txtSifra.Name = "txtSifra";
+            this.txtSifra.Size = new System.Drawing.Size(240, 20);
+            this.txtSifra.TabIndex = 3;
             // 
             // txtMejl
             // 
@@ -87,12 +98,15 @@
             this.lblMejl.TabIndex = 0;
             this.lblMejl.Text = "E-mail:";
             // 
-            // txtSifra
+            // btnPrijaviSe
             // 
-            this.txtSifra.Location = new System.Drawing.Point(50, 56);
-            this.txtSifra.Name = "txtSifra";
-            this.txtSifra.Size = new System.Drawing.Size(240, 20);
-            this.txtSifra.TabIndex = 3;
+            this.btnPrijaviSe.Location = new System.Drawing.Point(215, 82);
+            this.btnPrijaviSe.Name = "btnPrijaviSe";
+            this.btnPrijaviSe.Size = new System.Drawing.Size(75, 23);
+            this.btnPrijaviSe.TabIndex = 4;
+            this.btnPrijaviSe.Text = "Prijavi se";
+            this.btnPrijaviSe.UseVisualStyleBackColor = true;
+            this.btnPrijaviSe.Click += new System.EventHandler(this.btnPrijaviSe_Click);
             // 
             // Prijava
             // 
@@ -113,12 +127,12 @@
         #endregion
 
         private System.Windows.Forms.PictureBox PictureLogo;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.GroupBox gbDobrodosli;
         private System.Windows.Forms.Label lblMejl;
         private System.Windows.Forms.Label lblSifra;
         private System.Windows.Forms.TextBox txtMejl;
         private System.Windows.Forms.TextBox txtSifra;
+        private System.Windows.Forms.Button btnPrijaviSe;
     }
 }
 

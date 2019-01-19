@@ -10,7 +10,7 @@ namespace Domen
         protected String prezime;
         protected String mejl;
         protected String telefon;
-        private String sifra;
+        protected String sifra;
 
         #region Get, Set
         public String Sifra

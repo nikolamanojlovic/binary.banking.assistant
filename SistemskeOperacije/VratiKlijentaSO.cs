@@ -8,11 +8,11 @@ using Sesija;
 
 namespace SistemskeOperacije
 {
-    public class VratiAdminaSO : OpstaSO
+    public class VratiKlijentaSO : OpstaSO
     {
         protected override bool Izvrsi(IDomenskiObjekat objekat)
         {
-            return Broker.DajInstancu().NadjiSlogSaSlozenimUslovomIVratiGa(objekat as Admin);
+            return Broker.DajInstancu().NadjiSlogSaSlozenimUslovomIVratiGa(objekat as Klijent);
         }
     }
 }

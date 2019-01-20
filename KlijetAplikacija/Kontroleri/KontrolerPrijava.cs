@@ -32,19 +32,22 @@ namespace KlijetAplikacija.Kontroleri
                 }
                 else if (odgovor.Objekat is Admin)
                 {
-
+                    Console.WriteLine("admin je ulogovan");
                 }
                 else if (odgovor.Objekat is Klijent)
                 {
                     glavnaFormaKlijent.Klijent = odgovor.Objekat as Klijent;
+                    glavnaFormaKlijent.Text = String.Format(glavnaFormaKlijent.Text, new String[] {
+                        glavnaFormaKlijent.Klijent.Ime,
+                        glavnaFormaKlijent.Klijent.Prezime
+                    });
                     glavnaFormaKlijent.Show();
                 }
                 prijavaForma.Close();
             }
             catch (Exception)
             {
-
-                throw;
+                prijavaForma.PrikaziGreskaPoruku(Konstante.Server.SERVER_NIJE_DOSTUPAN);
             }
         }
     }

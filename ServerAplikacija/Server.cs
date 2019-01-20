@@ -13,7 +13,7 @@ namespace ServerAplikacija
     public class Server
     {
         private Socket serverSoket;
-        private bool kraj;
+        private bool kraj = false;
 
         public void StartServer()
         {
@@ -26,7 +26,6 @@ namespace ServerAplikacija
         {
             try
             {
-                kraj = false;
                 serverSoket.Listen(5);
                 while (!kraj)
                 {

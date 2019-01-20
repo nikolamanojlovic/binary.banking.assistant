@@ -1,4 +1,7 @@
-﻿namespace Domen
+﻿using System.Collections.Generic;
+using System.Data.SqlClient;
+
+namespace Domen
 {
     public class Transakcija : IDomenskiObjekat
     {
@@ -24,6 +27,41 @@
             get { return posiljalac; }
             set { posiljalac = value; }
         }
+
+        public bool ImaVezaniObjekat()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool Napuni(SqlDataReader citac, ref IDomenskiObjekat objekat)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool NapuniVezaneObjekte(SqlDataReader citac, ref IDomenskiObjekat objekat)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void PostaviPocetniBroj(ref IDomenskiObjekat objekat)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public string PostaviVrednostAtributa()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void PovecajBroj(SqlDataReader citac, ref IDomenskiObjekat objekat)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public string VratiAtributPretrazivanja()
+        {
+            throw new System.NotImplementedException();
+        }
         #endregion
 
         public string VratiNazivPK()
@@ -32,6 +70,26 @@
         }
 
         public string VratiNazivTabele()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public string VratiNazivTabeleVezanogObjekta()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public string VratiUslovZaNadjiSlog()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public string VratiUslovZaNadjiSlogove()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public List<IDomenskiObjekat> VratiVezaniObjekat()
         {
             throw new System.NotImplementedException();
         }

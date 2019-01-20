@@ -21,8 +21,6 @@ namespace KlijetAplikacija
         {
             InitializeComponent();
 
-            this.Text = String.Format(this.Text, new String[] { klijent.Ime, klijent.Prezime });
-
             this.pbRacuni.SizeMode = PictureBoxSizeMode.Zoom;
             this.pbRacuni.BackColor = Color.Transparent;
             this.pbKrediti.SizeMode = PictureBoxSizeMode.Zoom;

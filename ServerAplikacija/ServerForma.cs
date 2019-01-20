@@ -49,6 +49,11 @@ namespace ServerAplikacija
             }
         }
 
+        public void OsveziLog(String poruka)
+        {
+            txtLog.AppendText(poruka + Konstante.GUI.NOVI_RED);
+        }
+
         private void btnZaustavi_Click(object sender, EventArgs e)
         {
             SakrijiElemente();
@@ -124,9 +129,6 @@ namespace ServerAplikacija
             server.StopServer();
         }
 
-        private void OsveziLog(String poruka)
-        {
-            this.txtLog.AppendText("\n" + poruka);
-        }
+        public delegate void OsveziLogCallback(string text);
     }
 }

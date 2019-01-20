@@ -22,14 +22,6 @@ namespace KlijetAplikacija
                 FormBorderStyle = FormBorderStyle.FixedSingle,
                 StartPosition = FormStartPosition.CenterScreen
             });
-
-            /**
-             * new GlavnaFormaKlijent(new Klijent() { Ime = "Nikola", Prezime = "Manojlovc"})
-            {
-                FormBorderStyle = FormBorderStyle.FixedSingle,
-                StartPosition = FormStartPosition.CenterScreen
-            }
-             **/
         }
     }
 }

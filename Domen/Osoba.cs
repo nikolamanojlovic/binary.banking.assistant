@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
 
 namespace Domen
 {
@@ -57,7 +59,18 @@ namespace Domen
         #endregion
 
         public abstract string VratiNazivPK();
-        public abstract string VratiNazivTabele();
+        public abstract string VratiNazivTabeleVezanogObjekta();
         public abstract string VratiVrednostiZaUbacivanje();
+        public abstract string VratiUslovZaNadjiSlog();
+        public abstract string VratiNazivTabele();
+        public abstract string VratiUslovZaNadjiSlogove();
+        public abstract string VratiAtributPretrazivanja();
+        public abstract string PostaviVrednostAtributa();
+        public abstract void PostaviPocetniBroj(ref IDomenskiObjekat objekat);
+        public abstract void PovecajBroj(SqlDataReader citac, ref IDomenskiObjekat objekat);
+        public abstract bool Napuni(SqlDataReader citac, ref IDomenskiObjekat objekat);
+        public abstract bool NapuniVezaneObjekte(SqlDataReader citac, ref IDomenskiObjekat objekat);
+        public abstract bool ImaVezaniObjekat();
+        public abstract List<IDomenskiObjekat> VratiVezaniObjekat();
     }
 }

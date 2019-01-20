@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Domen;
+using System;
+using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
+using static Domen.Operacije;
 
 namespace ServerAplikacija
 {
@@ -9,7 +12,7 @@ namespace ServerAplikacija
     {
         private NetworkStream tok;
         private BinaryFormatter formater;
-        bool kraj;
+        private bool kraj;
 
         public ObradaKlijenta(NetworkStream tok)
         {
@@ -32,7 +35,36 @@ namespace ServerAplikacija
             {
                 while (!kraj)
                 {
-                   
+                    KlijentTransferObjekat zahtev = formater.Deserialize(tok) as KlijentTransferObjekat;
+                    ServerTransferObjekat odgovor;
+
+                    switch(zahtev.Operacija)
+                    {
+                        case Operacija.ULOGUJ_KLIJENTA:
+                            KeyValuePair<String, String> kredencijali = (KeyValuePair < String, String >) zahtev.Poruka;
+                            IDomenskiObjekat klijent = KontrolerPL.DajKontroler().PronadjiKlijenta(kredencijali.Key, kredencijali.Value);
+
+                            if (klijent == null)
+                            {
+                                odgovor = new ServerTransferObjekat()
+                                {
+                                    Rezultat = 0
+                                };
+                               
+                            } else
+                            {
+                                odgovor = new ServerTransferObjekat()
+                                {
+                                    Objekat = klijent,
+                                    Rezultat = 1
+                                };
+                            }
+                            
+                            formater.Serialize(tok, odgovor);
+                            break;
+                        case Operacija.KRAJ:
+                            break;
+                    }
                 }
             }
             catch (Exception)

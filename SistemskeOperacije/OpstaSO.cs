@@ -24,6 +24,7 @@ namespace SistemskeOperacije
                 Broker.DajInstancu().OtvoriKonekciju();
                 Broker.DajInstancu().ZapocniTransakciju();
                 izvrseno = Izvrsi(objekat);
+                Broker.DajInstancu().ZatvoriCitac();
                 if (izvrseno)
                 {
                     Broker.DajInstancu().PotvrdiTransakciju();
@@ -34,8 +35,9 @@ namespace SistemskeOperacije
                 }
                 return izvrseno;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
                 return false;
             }
             finally

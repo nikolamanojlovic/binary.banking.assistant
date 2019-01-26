@@ -69,13 +69,14 @@
             public static readonly string NAZIV_TABELE = "admin";
             public static readonly string PK_ADMIN_ID = "admin_id";
             public static readonly string POLJE_SIFRA = "sifra";
+            public static readonly string POLJE_EMAIL = "mejl";
             public static readonly string TABELA_ADMIN_UBACI = " '{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}' ";
         }
 
         public static class TabelaTipKredita
         {
             public static readonly string NAZIV_TABELE = "tip_kredita";
-            public static readonly string PK_TIP_RACUNA_ID = "tip_kredita_id";
+            public static readonly string PK_TIP_KREDITA_ID = "tip_kredita_id";
             public static readonly string TABELA_TIP_KREDITA_UBACI = " '{0}', '{1}', '{2}', '{3}', '{4}' ";
         }
 
@@ -84,6 +85,13 @@
             public static readonly string NAZIV_TABELE = "rata";
             public static readonly string PK_RATA_ID = "rata_rb";
             public static readonly string TABELA_RATA_UBACI = " '{0}', '{1}', '{2}', '{3}' ";
+        }
+
+        public static class TabelaAktiviraniKredit
+        {
+            public static readonly string NAZIV_TABELE = "aktivirani_kredit";
+            public static readonly string PK_AK_ID = "broj_kredita";
+            public static readonly string TABELA_AK_UBACI = " '{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}' ";
         }
     }
 }

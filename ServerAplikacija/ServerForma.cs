@@ -49,17 +49,13 @@ namespace ServerAplikacija
             }
         }
 
-        public void OsveziLog(String poruka)
-        {
-            txtLog.AppendText(poruka + Konstante.GUI.NOVI_RED);
-        }
-
         private void btnZaustavi_Click(object sender, EventArgs e)
         {
             SakrijiElemente();
             ZaustaviServer();
         }
 
+        #region GUI metode
         private void PrikaziElemente()
         {
             this.btnZaustavi.Enabled = true;
@@ -117,7 +113,9 @@ namespace ServerAplikacija
             this.ClientSize = new System.Drawing.Size(291, 100);
             CenterToScreen();
         }
+        #endregion
 
+        #region Server metode
         private void PokreniServer()
         {
             server = new Server();
@@ -128,7 +126,21 @@ namespace ServerAplikacija
         {
             server.StopServer();
         }
+        #endregion
+
+        #region Dogadjaji
+        public void OsveziLog(String poruka)
+        {
+            txtLog.AppendText(poruka + Konstante.GUI.NOVI_RED);
+        }
+
+        public void OsveziUlogovane(List<Osoba> ulogovani)
+        {
+            dgvAktivni.DataSource = new BindingList<Osoba>(ulogovani);
+        }
 
         public delegate void OsveziLogCallback(string text);
+        public delegate void OsveziUlogovaneCallback(List<Osoba> ulogovani);
+        #endregion
     }
 }

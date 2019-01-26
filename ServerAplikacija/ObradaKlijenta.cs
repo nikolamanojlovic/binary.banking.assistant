@@ -55,8 +55,8 @@ namespace ServerAplikacija
                             {
                                 odgovor = new ServerTransferObjekat()
                                 {
-                                    Objekat = klijent,
-                                    Rezultat = 1
+                                    Rezultat = 1,
+                                    Objekat = klijent
                                 };
                             }
                             
@@ -67,8 +67,9 @@ namespace ServerAplikacija
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.Write(ex.StackTrace);
                 Console.WriteLine("Klijent se diskonektovao!");
             }
         }

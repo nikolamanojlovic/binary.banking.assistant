@@ -1,9 +1,11 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
 namespace Domen
 {
+    [Serializable]
     public class Klijent : Osoba, IDomenskiObjekat
     {
         private String ulica;
@@ -35,39 +37,14 @@ namespace Domen
             get { return ulica; }
             set { ulica = value; }
         }
-
-        public override bool ImaVezaniObjekat()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool Napuni(SqlDataReader citac, ref IDomenskiObjekat objekat)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool NapuniVezaneObjekte(SqlDataReader citac, ref IDomenskiObjekat objekat)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void PostaviPocetniBroj(ref IDomenskiObjekat objekat)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string PostaviVrednostAtributa()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void PovecajBroj(SqlDataReader citac, ref IDomenskiObjekat objekat)
-        {
-            throw new NotImplementedException();
-        }
         #endregion
 
         #region Metode
+        public override bool ImaVezaniObjekat()
+        {
+            return true;
+        }
+
         public override string VratiNazivPK()
         {
             return Konstante.TabelaKlijent.PK_KLIJENT_ID;
@@ -85,7 +62,7 @@ namespace Domen
         
         public override string VratiUslovZaNadjiSlog()
         {
-            return Konstante.TabelaKlijent.PK_KLIJENT_ID + "='" + ID + "'";
+            return Konstante.TabelaKlijent.PK_KLIJENT_MEJL + "='" + Mejl + "'";
         }
 
         public override string VratiUslovZaNadjiSlogove()
@@ -99,19 +76,92 @@ namespace Domen
                                  this.telefon, this.sifra, this.ulica, this.brojKuce, this.grad);
         }
 
+        public override string VratiAtributPretrazivanja()
+        {
+            return Konstante.TabelaKlijent.PK_KLIJENT_ID + "='" + ID + "'";
+        }
+
+        public override bool Napuni(MySqlDataReader citac, ref IDomenskiObjekat objekat)
+        {
+            try
+            {
+                if (citac.Read())
+                {
+                    objekat = new Klijent()
+                    {
+                        ID = citac.GetInt64(0),
+                        JMBG = citac.GetString(1),
+                        Ime = citac.GetString(2),
+                        Prezime = citac.GetString(3),
+                        Mejl = citac.GetString(4),
+                        Telefon = citac.GetString(5),
+                        Sifra = citac.GetString(6),
+                        Ulica = citac.GetString(7),
+                        BrojKuce = citac.GetInt32(8),
+                        Grad = citac.GetString(9)
+                    };
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+                return false;
+            }
+        }
+
+        public override bool NapuniVezaneObjekte(MySqlDataReader citac, ref IDomenskiObjekat objekat)
+        {
+            try
+            {
+                while (citac.Read())
+                {
+                    (objekat as Klijent).Racuni.Add(new Racun()
+                    {
+                        ID = citac.GetInt64(0),
+                        BrojRacuna = citac.GetString(1),
+                        Tip = (TipRacuna)Enum.Parse(typeof(TipRacuna), citac.GetString(2), true),
+                        DatumKreiranja = DateTime.Parse(citac.GetString(3))
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+                return false;
+            }
+            return true;
+        }
+
+        public override void PostaviPocetniBroj(ref IDomenskiObjekat objekat)
+        {
+            (objekat as Klijent).ID = 0;
+        }
+
+        public override void PovecajBroj(MySqlDataReader citac, ref IDomenskiObjekat objekat)
+        {
+            (objekat as Klijent).ID = Convert.ToInt64(citac[Konstante.TabelaKlijent.PK_KLIJENT_ID]) + 1;
+        }
+
         public override List<IDomenskiObjekat> VratiVezaniObjekat()
         {
             return new List<IDomenskiObjekat>(this.racuni);
         }
 
-        public override string VratiAtributPretrazivanja()
+        #region Neimplementirane
+        public override string VratiUslovZaJoin()
         {
-            return Konstante.TabelaKlijent.PK_KLIJENT_MEJL + "='" + Mejl + "'" + Konstante.SQL.AND + Konstante.TabelaAdmin.POLJE_SIFRA + "='" + Sifra + "'";
+            throw new NotImplementedException();
         }
 
-        #region Neimplementirane
+        public override string PostaviVrednostAtributa()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
         #endregion
     }
 }
+ 

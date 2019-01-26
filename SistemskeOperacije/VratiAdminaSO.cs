@@ -12,7 +12,8 @@ namespace SistemskeOperacije
     {
         protected override bool Izvrsi(IDomenskiObjekat objekat)
         {
-            return Broker.DajInstancu().NadjiSlogSaSlozenimUslovomIVratiGa(objekat as Admin);
+            Rezultat = Broker.DajInstancu().NadjiSlogIVratiGa(objekat);
+            return true;
         }
     }
 }

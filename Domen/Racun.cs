@@ -1,10 +1,12 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.SqlClient;
 
 namespace Domen
 {
+    [Serializable]
     public class Racun : IDomenskiObjekat
     {
         private long id;
@@ -45,12 +47,12 @@ namespace Domen
             throw new NotImplementedException();
         }
 
-        public bool Napuni(SqlDataReader citac, ref IDomenskiObjekat objekat)
+        public bool Napuni(MySqlDataReader citac, ref IDomenskiObjekat objekat)
         {
             throw new NotImplementedException();
         }
 
-        public bool NapuniVezaneObjekte(SqlDataReader citac, ref IDomenskiObjekat objekat)
+        public bool NapuniVezaneObjekte(MySqlDataReader citac, ref IDomenskiObjekat objekat)
         {
             throw new NotImplementedException();
         }
@@ -65,7 +67,7 @@ namespace Domen
             throw new NotImplementedException();
         }
 
-        public void PovecajBroj(SqlDataReader citac, ref IDomenskiObjekat objekat)
+        public void PovecajBroj(MySqlDataReader citac, ref IDomenskiObjekat objekat)
         {
             throw new NotImplementedException();
         }
@@ -89,6 +91,11 @@ namespace Domen
         public string VratiNazivTabeleVezanogObjekta()
         {
             return Konstante.TabelaRacun.NAZIV_TABELE;
+        }
+
+        public string VratiUslovZaJoin()
+        {
+            throw new NotImplementedException();
         }
 
         public string VratiUslovZaNadjiSlog()

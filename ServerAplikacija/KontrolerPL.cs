@@ -24,7 +24,7 @@ namespace ServerAplikacija
         #region Singlton, Get, Set
         private KontrolerPL()
         {
-
+            ulgovani = new List<Osoba>();
         }
 
         public static KontrolerPL DajKontroler()
@@ -53,34 +53,49 @@ namespace ServerAplikacija
         {
             OsveziLog(String.Format(PRIJAVA, mejl));
             VratiKlijentaSO klijentSO = new VratiKlijentaSO();
-            klijentSO.IzvrsiSO(new Klijent() { Mejl = mejl, Sifra = sifra });
+            klijentSO.IzvrsiSO(new Klijent() { Mejl = mejl });
 
             if (klijentSO.Rezultat != null)
             {
-                OsveziLog(String.Format(USPESNA_PRIJAVA, mejl));
-                Ulogovani.Add(klijentSO.Rezultat as Osoba);
-                return klijentSO.Rezultat as IDomenskiObjekat;
+                Klijent klijent = klijentSO.Rezultat as Klijent;
+      
+                if ( sifra.Equals(klijent.Sifra) )
+                {
+                    OsveziLog(String.Format(USPESNA_PRIJAVA, mejl));
+                    Ulogovani.Add(klijent);
+                    OsveziUlogovane(Ulogovani);
+                    return klijent as IDomenskiObjekat;
+                }
             } else
             {
                 VratiAdminaSO adminSO = new VratiAdminaSO();
-                adminSO.IzvrsiSO(new Admin() { Mejl = mejl, Sifra = sifra });
+                adminSO.IzvrsiSO(new Admin() { Mejl = mejl });
 
-                if (adminSO.Rezultat == null)
+                if (adminSO.Rezultat != null)
                 {
-                    OsveziLog(String.Format(NEUSPESNA_PRIJAVA, mejl));
+                    Admin admin = adminSO.Rezultat as Admin;
+
+                    if ( sifra.Equals(admin.Sifra) )
+                    {
+                        OsveziLog(String.Format(USPESNA_PRIJAVA, mejl));
+                        Ulogovani.Add(admin);
+                        OsveziUlogovane(Ulogovani);
+                        return admin as IDomenskiObjekat;
+                    }
                 }
-                else
-                {
-                    OsveziLog(String.Format(USPESNA_PRIJAVA, mejl));
-                    Ulogovani.Add(klijentSO.Rezultat as Osoba);
-                }
-                return adminSO.Rezultat as IDomenskiObjekat;
             }
+            OsveziLog(String.Format(NEUSPESNA_PRIJAVA, mejl));
+            return null;
         }
 
         public void OsveziLog(string poruka)
         {
             Forma.Invoke(new OsveziLogCallback(Forma.OsveziLog), poruka);
+        }
+
+        public void OsveziUlogovane(List<Osoba> uglogovani)
+        {
+            Forma.Invoke(new OsveziUlogovaneCallback(Forma.OsveziUlogovane), ulgovani);
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Domen;
+using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -10,25 +12,22 @@ namespace Sesija
         public static Broker Instanca;
         public static String Poruka;
 
-        public SqlConnection Konekcija;
-        public SqlCommand Komanda;
-        public SqlDataReader Citac;
-        public SqlTransaction Transakcija;
+        public MySqlConnection Konekcija;
+        public MySqlCommand Komanda;
+        public MySqlDataReader Citac;
+        public MySqlTransaction Transakcija;
 
         public Broker()
         {
-            Konekcija = new SqlConnection(@"server=localhost;user id=root;database=bba_bp");
-            Komanda = new SqlCommand
-            {
-                Connection = Konekcija
-            };
+            Konekcija = new MySqlConnection(@"server=localhost;user id=root;database=bba_bp");
+            Komanda = Konekcija.CreateCommand();
         }
 
         public static Broker DajInstancu()
         {
             if (Instanca == null)
             {
-                return new Broker();
+                Instanca = new Broker();
             }
             return Instanca;
         }
@@ -62,6 +61,14 @@ namespace Sesija
         {
             Transakcija.Rollback();
         }
+
+        public void ZatvoriCitac()
+        {
+            if (!Citac.IsClosed)
+            {
+                Citac.Close();
+            }
+        }
         #endregion
 
         #region Operacije nad bazom
@@ -74,8 +81,9 @@ namespace Sesija
                 Komanda.CommandType = CommandType.Text;
                 Komanda.ExecuteNonQuery();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.StackTrace);
                 return false;
             }
             return true;
@@ -90,8 +98,9 @@ namespace Sesija
                 Komanda.CommandType = CommandType.Text;
                 Komanda.ExecuteNonQuery();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.StackTrace);
                 return false;
             }
             return true;
@@ -106,8 +115,9 @@ namespace Sesija
                 Komanda.CommandType = CommandType.Text;
                 Komanda.ExecuteNonQuery();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.StackTrace);
                 return false;
             }
             return true;
@@ -125,9 +135,10 @@ namespace Sesija
                 signal = Citac.HasRows;
                 Poruka = signal ? Konstante.DB.SLOG_POSTOJI : Konstante.DB.SLOG_NE_POSTOJI;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 Poruka = Konstante.DB.NAUSPESNO_PRETRAZIVANJE;
+                Console.WriteLine(ex.StackTrace);
                 return false;
             }
             return signal;
@@ -156,16 +167,16 @@ namespace Sesija
                 Komanda.CommandType = CommandType.Text;
                 Komanda.ExecuteNonQuery();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.StackTrace);
                 return false;
             }
             return true;
         }
 
-        public bool NadjiSlogIVratiGa(IDomenskiObjekat odo)
+        public IDomenskiObjekat NadjiSlogIVratiGa(IDomenskiObjekat odo)
         {
-            bool signal = true;
             try
             {
                 Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, Konstante.SQL.ALL) + odo.VratiNazivTabele() +
@@ -173,48 +184,29 @@ namespace Sesija
                 Komanda.CommandType = CommandType.Text;
                 Citac = Komanda.ExecuteReader();
 
-                if (!signal)
+                if (!Citac.HasRows)
                 {
                     Poruka = Konstante.DB.SLOG_NE_POSTOJI;
-                    return false;
+                    return null;
                 }
+                odo.Napuni(Citac, ref odo);
                 Poruka = Konstante.DB.SLOG_POSTOJI;
-
-                if (odo.ImaVezaniObjekat() && odo.Napuni(Citac, ref odo))
-                {
-                    Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, Konstante.SQL.ALL) + odo.VratiNazivTabeleVezanogObjekta() +
-                                          String.Format(Konstante.SQL.WHERE, odo.VratiUslovZaNadjiSlogove());
-                    Komanda.CommandType = CommandType.Text;
-                    Citac = Komanda.ExecuteReader();
-                    Poruka = odo.NapuniVezaneObjekte(Citac, ref odo) ? Konstante.DB.VEZANI_SLOG_USPESNO_PROCITAN : Konstante.DB.VEZANI_SLOG_NEUSPESNO_PROCITAN;
-                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 Poruka = Konstante.DB.NAUSPESNO_PRETRAZIVANJE;
-                return false;
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+                return null;
             }
-            return true;
+            return odo;
         }
 
-        public bool NadjiSlogSaSlozenimUslovomIVratiGa(IDomenskiObjekat odo)
+        public List<IDomenskiObjekat> NadjiSlabObjekatIVratiGa(IDomenskiObjekat odo)
         {
-            bool signal = true;
             try
             {
-                Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, Konstante.SQL.ALL) + odo.VratiNazivTabele() +
-                                      String.Format(Konstante.SQL.WHERE, odo.VratiAtributPretrazivanja());
-                Komanda.CommandType = CommandType.Text;
-                Citac = Komanda.ExecuteReader();
-
-                if (!signal)
-                {
-                    Poruka = Konstante.DB.SLOG_NE_POSTOJI;
-                    return false;
-                }
-                Poruka = Konstante.DB.SLOG_POSTOJI;
-
-                if (odo.ImaVezaniObjekat() && odo.Napuni(Citac, ref odo))
+                if (odo.ImaVezaniObjekat())
                 {
                     Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, Konstante.SQL.ALL) + odo.VratiNazivTabeleVezanogObjekta() +
                                           String.Format(Konstante.SQL.WHERE, odo.VratiUslovZaNadjiSlogove());
@@ -223,12 +215,14 @@ namespace Sesija
                     Poruka = odo.NapuniVezaneObjekte(Citac, ref odo) ? Konstante.DB.VEZANI_SLOG_USPESNO_PROCITAN : Konstante.DB.VEZANI_SLOG_NEUSPESNO_PROCITAN;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 Poruka = Konstante.DB.NAUSPESNO_PRETRAZIVANJE;
-                return false;
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+                return null;
             }
-            return true;
+            return odo.VratiVezaniObjekat();
         }
 
         public bool PamtiSlozeniSlog(IDomenskiObjekat odo)
@@ -250,10 +244,11 @@ namespace Sesija
 
                 Poruka = Konstante.DB.SLOZENI_SLOG_USPENO_ZAPAMCEN;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 Poruka = Konstante.DB.SLOZENI_SLOG_NEUSPENO_ZAPAMCEN;
                 PonistiTransakciju();
+                Console.WriteLine(ex.StackTrace);
                 return false;
             }
             return true;

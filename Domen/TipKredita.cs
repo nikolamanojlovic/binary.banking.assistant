@@ -1,15 +1,17 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
 namespace Domen
 {
+    [Serializable]
     public class TipKredita : IDomenskiObjekat
     {
         private long id;
         private String naziv;
         private double minDug;
-        private double maxDug;
+        private double maksDug;
         private VremenskiOkvir vremenskiOkvir;
 
         #region Get, Set
@@ -19,10 +21,10 @@ namespace Domen
             set { vremenskiOkvir = value; }
         }
 
-        public double MaxDug
+        public double MaksDug
         {
-            get { return maxDug; }
-            set { maxDug = value; }
+            get { return maksDug; }
+            set { maksDug = value; }
         }
 
         public double MinDug
@@ -48,12 +50,12 @@ namespace Domen
             throw new NotImplementedException();
         }
 
-        public bool Napuni(SqlDataReader citac, ref IDomenskiObjekat objekat)
+        public bool Napuni(MySqlDataReader citac, ref IDomenskiObjekat objekat)
         {
             throw new NotImplementedException();
         }
 
-        public bool NapuniVezaneObjekte(SqlDataReader citac, ref IDomenskiObjekat objekat)
+        public bool NapuniVezaneObjekte(MySqlDataReader citac, ref IDomenskiObjekat objekat)
         {
             throw new NotImplementedException();
         }
@@ -68,7 +70,7 @@ namespace Domen
             throw new NotImplementedException();
         }
 
-        public void PovecajBroj(SqlDataReader citac, ref IDomenskiObjekat objekat)
+        public void PovecajBroj(MySqlDataReader citac, ref IDomenskiObjekat objekat)
         {
             throw new NotImplementedException();
         }
@@ -81,7 +83,7 @@ namespace Domen
 
         public string VratiNazivPK()
         {
-            return Konstante.TabelaTipKredita.PK_TIP_RACUNA_ID;
+            return Konstante.TabelaTipKredita.PK_TIP_KREDITA_ID;
         }
 
         public string VratiNazivTabele()
@@ -92,6 +94,11 @@ namespace Domen
         public string VratiNazivTabeleVezanogObjekta()
         {
             return Konstante.TabelaRacun.NAZIV_TABELE;
+        }
+
+        public string VratiUslovZaJoin()
+        {
+            throw new NotImplementedException();
         }
 
         public string VratiUslovZaNadjiSlog()
@@ -111,7 +118,7 @@ namespace Domen
 
         public string VratiVrednostiZaUbacivanje()
         {
-            return String.Format(Konstante.TabelaRacun.TABELA_RACUN_UBACI, this.id, this.naziv, this.minDug, this.maxDug, this.vremenskiOkvir);
+            return String.Format(Konstante.TabelaRacun.TABELA_RACUN_UBACI, this.id, this.naziv, this.minDug, this.maksDug, this.vremenskiOkvir);
         }
     }
 

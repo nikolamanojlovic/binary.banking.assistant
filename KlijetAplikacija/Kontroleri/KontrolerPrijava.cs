@@ -43,10 +43,11 @@ namespace KlijetAplikacija.Kontroleri
                     });
                     glavnaFormaKlijent.Show();
                 }
-                prijavaForma.Close();
+                prijavaForma.Hide();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.StackTrace);
                 prijavaForma.PrikaziGreskaPoruku(Konstante.Server.SERVER_NIJE_DOSTUPAN);
             }
         }

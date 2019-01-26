@@ -18,7 +18,6 @@ namespace KlijetAplikacija
 
         private Komunikacija()
         {
-
             klijent = new TcpClient(Konstante.Server.LOCALHOST, 10000);
             tok = klijent.GetStream();
             formater = new BinaryFormatter();

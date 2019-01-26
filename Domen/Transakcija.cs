@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 
 namespace Domen
 {
+    [Serializable]
     public class Transakcija : IDomenskiObjekat
     {
         private Racun posiljalac;
@@ -33,12 +36,12 @@ namespace Domen
             throw new System.NotImplementedException();
         }
 
-        public bool Napuni(SqlDataReader citac, ref IDomenskiObjekat objekat)
+        public bool Napuni(MySqlDataReader citac, ref IDomenskiObjekat objekat)
         {
             throw new System.NotImplementedException();
         }
 
-        public bool NapuniVezaneObjekte(SqlDataReader citac, ref IDomenskiObjekat objekat)
+        public bool NapuniVezaneObjekte(MySqlDataReader citac, ref IDomenskiObjekat objekat)
         {
             throw new System.NotImplementedException();
         }
@@ -53,7 +56,7 @@ namespace Domen
             throw new System.NotImplementedException();
         }
 
-        public void PovecajBroj(SqlDataReader citac, ref IDomenskiObjekat objekat)
+        public void PovecajBroj(MySqlDataReader citac, ref IDomenskiObjekat objekat)
         {
             throw new System.NotImplementedException();
         }
@@ -75,6 +78,11 @@ namespace Domen
         }
 
         public string VratiNazivTabeleVezanogObjekta()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public string VratiUslovZaJoin()
         {
             throw new System.NotImplementedException();
         }

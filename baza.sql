@@ -24,5 +24,12 @@ CREATE TABLE klijent (
     grad VARCHAR(255)
 );
 
+CREATE TABLE racun (
+	racun_id INTEGER,
+    broj_racuna VARCHAR(255),
+    tip_racuna VARCHAR(255),
+    datum_kreiranja DATE
+);
+
 INSERT INTO admin VALUES(0, "030303", "Nikola", "Manojlović", "nikola@gmail.com", "065555555", "nikola", "Administrator");
 INSERT INTO klijent VALUES(0, "040404", "Jovan", "Jović", "jovan@gmail.com", "064444444", "jovan", "Bulevar Oslobođenja", 5, "Beograd");

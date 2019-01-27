@@ -103,7 +103,7 @@
             public static readonly string PK_TRANSAKCIJA_ID = "vremenska_oznaka, posiljalac_klijent_id, posiljalac_racun_id, primalac_klijent_id, primalac_racun_id";
             public static readonly string POLJE_POSILJALAC = "posiljalac_klijent_id";
             public static readonly string POLJE_PRIMALAC = "primalac_klijent_id";
-            public static readonly string TABELA_TRASAKCIJA_UBACI = " '{0}', '{1}', '{2}', '{3}' ";
+            public static readonly string TABELA_TRASAKCIJA_UBACI = " '{0}', '{1}', '{2}', '{3}', '{4}', '{5}' ";
             public static readonly string TABELA_TRASAKCIJA_POSTAVI = " vremenskaOznaka='{0}', iznos='{1}' ";
         }
 

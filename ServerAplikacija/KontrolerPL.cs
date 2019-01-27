@@ -88,6 +88,13 @@ namespace ServerAplikacija
             return null;
         }
 
+        public List<IDomenskiObjekat> PronadjiKljentoveRacune(Klijent klijent)
+        {
+            VratiRacuneSO vratiRacuneSo = new VratiRacuneSO();
+            vratiRacuneSo.IzvrsiSO(klijent);
+            return null;
+        }
+
         public void OsveziLog(string poruka)
         {
             Forma.Invoke(new OsveziLogCallback(Forma.OsveziLog), poruka);

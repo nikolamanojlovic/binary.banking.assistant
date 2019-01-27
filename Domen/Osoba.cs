@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 namespace Domen
 {
     [Serializable]
-    public abstract class Osoba : IDomenskiObjekat
+    public abstract class Osoba
     {
         protected long id;
         protected String jmbg;
@@ -64,21 +64,5 @@ namespace Domen
             set { id = value; }
         }
         #endregion
-
-        public abstract string VratiNazivPK();
-        public abstract string VratiNazivTabeleVezanogObjekta();
-        public abstract string VratiVrednostiZaUbacivanje();
-        public abstract string VratiUslovZaNadjiSlog();
-        public abstract string VratiNazivTabele();
-        public abstract string VratiUslovZaNadjiSlogove();
-        public abstract string VratiUslovZaJoin();
-        public abstract string VratiAtributPretrazivanja();
-        public abstract string PostaviVrednostAtributa();
-        public abstract void PostaviPocetniBroj(ref IDomenskiObjekat objekat);
-        public abstract void PovecajBroj(MySqlDataReader citac, ref IDomenskiObjekat objekat);
-        public abstract bool Napuni(MySqlDataReader citac, ref IDomenskiObjekat objekat);
-        public abstract bool NapuniVezaneObjekte(MySqlDataReader citac, ref IDomenskiObjekat objekat);
-        public abstract bool ImaVezaniObjekat();
-        public abstract List<IDomenskiObjekat> VratiVezaniObjekat();
     }
 }

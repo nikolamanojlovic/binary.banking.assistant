@@ -62,6 +62,26 @@ namespace ServerAplikacija
                             
                             formater.Serialize(tok, odgovor);
                             break;
+                        case Operacija.KLIJENT_PRIKAZI_RACUNE:
+                            List<IDomenskiObjekat> racuni = KontrolerPL.DajKontroler().PronadjiKljentoveRacune(zahtev.Poruka as Klijent);
+
+                            if (racuni == null)
+                            {
+                                odgovor = new ServerTransferObjekat()
+                                {
+                                    Rezultat = 0
+                                };
+
+                            }
+                            else
+                            {
+                                odgovor = new ServerTransferObjekat()
+                                {
+                                    Rezultat = 1,
+                                    Objekat = racuni
+                                };
+                            }
+                            break;
                         case Operacija.KRAJ:
                             break;
                     }

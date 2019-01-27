@@ -1,4 +1,5 @@
 ﻿using Domen;
+using KlijetAplikacija.Kontroleri;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,11 +15,13 @@ namespace KlijetAplikacija
     public partial class MojiRacuniForma : Form
     {
         private GlavnaFormaKlijent glavnaFormaKlijent;
+        private KontrolerRacuni kontrolerRacuni;
 
-        public MojiRacuniForma(Klijent klijent, GlavnaFormaKlijent glavnaForma)
+        public MojiRacuniForma(GlavnaFormaKlijent glavnaForma)
         {
             InitializeComponent();
             this.glavnaFormaKlijent = glavnaForma;
+            this.kontrolerRacuni = new KontrolerRacuni();
 
             dgvMojiRacuni.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         }
@@ -38,6 +41,11 @@ namespace KlijetAplikacija
         {
             MessageBox.Show(String.Format(Konstante.GUI.GRESKA_TEKST, poruka), Konstante.GUI.GRESKA_NASLOV,
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void MojiRacuniForma_Load(object sender, EventArgs e)
+        {
+            kontrolerRacuni.PrikaziSveRacune(this);
         }
     }
 }

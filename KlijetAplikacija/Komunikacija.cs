@@ -12,9 +12,11 @@ namespace KlijetAplikacija
     public class Komunikacija
     {
         public static Komunikacija komunikacija;
+
         private TcpClient klijent;
         private NetworkStream tok;
         private BinaryFormatter formater;
+        private Osoba Sesija;
 
         private Komunikacija()
         {
@@ -30,6 +32,16 @@ namespace KlijetAplikacija
                 komunikacija = new Komunikacija();
             }
             return komunikacija;
+        }
+
+        public void PostaviSesiju(Osoba sesija)
+        {
+            Sesija = sesija;
+        }
+
+        public Osoba VratiSesiju()
+        {
+            return Sesija;
         }
 
         public void PosaljiZahtev(KlijentTransferObjekat klijentTransferObjekat)

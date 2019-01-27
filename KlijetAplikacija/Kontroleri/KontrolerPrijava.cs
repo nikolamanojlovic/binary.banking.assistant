@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using static Domen.Operacije;
 
 namespace KlijetAplikacija.Kontroleri
@@ -12,7 +13,7 @@ namespace KlijetAplikacija.Kontroleri
     {
         private const String NEODGOVARAJUCI_KREDENCIJALI = "Kredencijali nisu odgovarajući, pokušajte ponovo!";
 
-        public void PrijaviKlijenta(String mejl, String sifra, GlavnaFormaKlijent glavnaFormaKlijent, Prijava prijavaForma)
+        public void PrijaviKlijenta(String mejl, String sifra, Prijava prijavaForma)
         {
             try
             {
@@ -32,15 +33,30 @@ namespace KlijetAplikacija.Kontroleri
                 }
                 else if (odgovor.Objekat is Admin)
                 {
-                    Console.WriteLine("admin je ulogovan");
+                    Komunikacija.DajKomunikaciju().PostaviSesiju(odgovor.Objekat as Admin);
+                    GlavnaFormaAdmin glavnaFormaAdmin = new GlavnaFormaAdmin()
+                    {
+                        FormBorderStyle = FormBorderStyle.FixedSingle,
+                        StartPosition = FormStartPosition.CenterScreen,
+                        Text = String.Format(Konstante.GUI.DOBRODOSLI, new String[] {
+                                    Komunikacija.DajKomunikaciju().VratiSesiju().Ime,
+                                    Komunikacija.DajKomunikaciju().VratiSesiju().Prezime
+                               })
+                    };
+                    glavnaFormaAdmin.Show();
                 }
                 else if (odgovor.Objekat is Klijent)
                 {
-                    glavnaFormaKlijent.Klijent = odgovor.Objekat as Klijent;
-                    glavnaFormaKlijent.Text = String.Format(glavnaFormaKlijent.Text, new String[] {
-                        glavnaFormaKlijent.Klijent.Ime,
-                        glavnaFormaKlijent.Klijent.Prezime
-                    });
+                    Komunikacija.DajKomunikaciju().PostaviSesiju(odgovor.Objekat as Klijent);
+                    GlavnaFormaKlijent glavnaFormaKlijent = new GlavnaFormaKlijent()
+                    {
+                        FormBorderStyle = FormBorderStyle.FixedSingle,
+                        StartPosition = FormStartPosition.CenterScreen,
+                        Text = String.Format(Konstante.GUI.DOBRODOSLI, new String[] {
+                                    Komunikacija.DajKomunikaciju().VratiSesiju().Ime,
+                                    Komunikacija.DajKomunikaciju().VratiSesiju().Prezime
+                               })
+                    };
                     glavnaFormaKlijent.Show();
                 }
                 prijavaForma.Hide();

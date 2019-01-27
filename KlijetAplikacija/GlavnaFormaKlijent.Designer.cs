@@ -114,6 +114,7 @@
             this.pbRacuni.Size = new System.Drawing.Size(109, 97);
             this.pbRacuni.TabIndex = 0;
             this.pbRacuni.TabStop = false;
+            this.pbRacuni.Click += new System.EventHandler(this.pbRacuni_Click);
             // 
             // lblMojiRacuni
             // 

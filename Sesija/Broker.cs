@@ -202,27 +202,34 @@ namespace Sesija
             return odo;
         }
 
-        public List<IDomenskiObjekat> NadjiSlabObjekatIVratiGa(IDomenskiObjekat odo)
+        public List<IDomenskiObjekat> NadjiVezaneSlogoveIVratiIh(IDomenskiObjekat odo)
         {
-            try
+            if (odo.ImaVezaniObjekat())
             {
-                if (odo.ImaVezaniObjekat())
+                IDomenskiObjekat slab = (odo as IDomenskiSlozeniObjekat).VratiVezaniObjekat();
+
+                if (!String.IsNullOrEmpty(slab.VratiUslovZaNadjiSlog()))
                 {
-                    Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, Konstante.SQL.ALL) + odo.VratiNazivTabeleVezanogObjekta() +
-                                          String.Format(Konstante.SQL.WHERE, odo.VratiUslovZaNadjiSlogove());
-                    Komanda.CommandType = CommandType.Text;
-                    Citac = Komanda.ExecuteReader();
-                    Poruka = odo.NapuniVezaneObjekte(Citac, ref odo) ? Konstante.DB.VEZANI_SLOG_USPESNO_PROCITAN : Konstante.DB.VEZANI_SLOG_NEUSPESNO_PROCITAN;
+                    Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, Konstante.SQL.ALL) + slab.VratiNazivTabele() +
+                    String.Format(Konstante.SQL.WHERE, new String[]
+                                            {
+                                                (odo as IDomenskiSlozeniObjekat).VratiUslovZaNadjiSlogove(),
+                                                Konstante.SQL.AND,
+                                                slab.VratiUslovZaNadjiSlog()
+                                            });
                 }
+                else
+                {
+                    Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, Konstante.SQL.ALL) + slab.VratiNazivTabele() +
+                    String.Format(Konstante.SQL.WHERE, (odo as IDomenskiSlozeniObjekat).VratiUslovZaNadjiSlogove());
+                }
+
+                Komanda.CommandType = CommandType.Text;
+                Citac = Komanda.ExecuteReader();
+                Poruka = (odo as IDomenskiSlozeniObjekat).NapuniVezaneObjekte(Citac, ref odo)
+                         ? Konstante.DB.VEZANI_SLOG_USPESNO_PROCITAN : Konstante.DB.VEZANI_SLOG_NEUSPESNO_PROCITAN;
             }
-            catch (Exception ex)
-            {
-                Poruka = Konstante.DB.NAUSPESNO_PRETRAZIVANJE;
-                Console.WriteLine(ex.Message);
-                Console.WriteLine(ex.StackTrace);
-                return null;
-            }
-            return odo.VratiVezaniObjekat();
+            return (odo as IDomenskiSlozeniObjekat).VratiVezaneObjekte();
         }
 
         public bool PamtiSlozeniSlog(IDomenskiObjekat odo)
@@ -234,7 +241,7 @@ namespace Sesija
                 Komanda.CommandType = CommandType.Text;
                 Komanda.ExecuteNonQuery();
 
-                foreach(IDomenskiObjekat vezani in odo.VratiVezaniObjekat())
+                foreach(IDomenskiObjekat vezani in (odo as IDomenskiSlozeniObjekat).VratiVezaneObjekte())
                 {
                     Komanda.CommandText = Konstante.SQL.INSERT_INTO + vezani.VratiNazivTabele() +
                                           String.Format(Konstante.SQL.VALUES, vezani.VratiVrednostiZaUbacivanje());

@@ -15,6 +15,7 @@ namespace Domen
         private DateTime rokDospeca;
         private DateTime datumIsplate;
         private double kamata;
+        private int brojRata;
         private List<Rata> rata;
 
         #region Get, Set
@@ -64,6 +65,12 @@ namespace Domen
         {
             get { return klijent; }
             set { klijent = value; }
+        }
+
+        public int BrojRata
+        {
+            get { return brojRata; }
+            set { brojRata = value; }
         }
         #endregion
 
@@ -142,7 +149,7 @@ namespace Domen
             throw new NotImplementedException();
         }
 
-        public List<IDomenskiObjekat> VratiVezaniObjekat()
+        public IDomenskiObjekat VratiVezaniObjekat()
         {
             throw new NotImplementedException();
         }

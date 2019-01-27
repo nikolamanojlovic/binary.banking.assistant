@@ -15,27 +15,23 @@ namespace KlijetAplikacija.Kontroleri
 
         private List<Racun> racuni;
            
-        public void PrikaziSveRacune(MojiRacuniForma mojiRacuniForma, String kriterijum)
+        public void PrikaziSveRacune(MojiRacuniForma mojiRacuniForma)
         {
             try
             {
                 KlijentTransferObjekat zahtev = new KlijentTransferObjekat()
                 {
                     Operacija = Operacija.KLIJENT_PRIKAZI_RACUNE,
-                    Poruka = kriterijum
+                    Poruka = Komunikacija.DajKomunikaciju().VratiSesiju()
                 };
 
                 Komunikacija.DajKomunikaciju().PosaljiZahtev(zahtev);
                 ServerTransferObjekat odgovor = Komunikacija.DajKomunikaciju().ProcitajOdgovor();
 
                 racuni = (List<Racun>) odgovor.Objekat;
-                if ( odgovor.Rezultat == 0 )
+                if ( racuni == null || racuni.Count == 0 )
                 {
                     mojiRacuniForma.PrikaziInfoPoruku(RACUNI_NE_POSTOJE);
-                }
-                else if (racuni.Count < 0)
-                {
-                    mojiRacuniForma.PrikaziInfoPoruku(String.Format(RACUNI_NE_POSTOJE_KRIJERIJUM, kriterijum));
                 }
                 else
                 {
@@ -44,7 +40,8 @@ namespace KlijetAplikacija.Kontroleri
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine(ex.StackTrace);
+                mojiRacuniForma.PrikaziGreskaPoruku(Konstante.Server.SERVER_NIJE_DOSTUPAN);
             }
         }
 

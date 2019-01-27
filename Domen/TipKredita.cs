@@ -44,43 +44,9 @@ namespace Domen
             get { return naziv; }
             set { naziv = value; }
         }
-
-        public bool ImaVezaniObjekat()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Napuni(MySqlDataReader citac, ref IDomenskiObjekat objekat)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool NapuniVezaneObjekte(MySqlDataReader citac, ref IDomenskiObjekat objekat)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void PostaviPocetniBroj(ref IDomenskiObjekat objekat)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string PostaviVrednostAtributa()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void PovecajBroj(MySqlDataReader citac, ref IDomenskiObjekat objekat)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string VratiAtributPretrazivanja()
-        {
-            throw new NotImplementedException();
-        }
         #endregion
 
+        #region Metode
         public string VratiNazivPK()
         {
             return Konstante.TabelaTipKredita.PK_TIP_KREDITA_ID;
@@ -88,44 +54,75 @@ namespace Domen
 
         public string VratiNazivTabele()
         {
-            throw new NotImplementedException();
-        }
-
-        public string VratiNazivTabeleVezanogObjekta()
-        {
-            return Konstante.TabelaRacun.NAZIV_TABELE;
-        }
-
-        public string VratiUslovZaJoin()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string VratiUslovZaNadjiSlog()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string VratiUslovZaNadjiSlogove()
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<IDomenskiObjekat> VratiVezaniObjekat()
-        {
-            throw new NotImplementedException();
+            return Konstante.TabelaTipKredita.NAZIV_TABELE;
         }
 
         public string VratiVrednostiZaUbacivanje()
         {
-            return String.Format(Konstante.TabelaRacun.TABELA_RACUN_UBACI, this.id, this.naziv, this.minDug, this.maksDug, this.vremenskiOkvir);
+            return String.Format(Konstante.TabelaTipKredita.TABELA_TIP_KREDITA_UBACI, this.id, this.naziv, this.minDug, this.maksDug, this.vremenskiOkvir);
         }
+
+        public string VratiUslovZaNadjiSlog()
+        {
+            return Konstante.TabelaTipKredita.POLJE_NAZIV + "='" + Naziv + "'";
+        }
+
+        public string VratiAtributPretrazivanja()
+        {
+            return Konstante.TabelaTipKredita.PK_TIP_KREDITA_ID;
+        }
+
+        public string PostaviVrednostAtributa()
+        {
+            return String.Format(Konstante.TabelaTipKredita.TABELA_TIP_KREDITA_POSTAVI, this.id, this.naziv, this.minDug, this.maksDug, this.vremenskiOkvir);
+        }
+
+        public void PostaviPocetniBroj(ref IDomenskiObjekat objekat)
+        {
+            (objekat as TipKredita).ID = 0;
+        }
+
+        public void PovecajBroj(MySqlDataReader citac, ref IDomenskiObjekat objekat)
+        {
+            (objekat as TipKredita).ID = Convert.ToInt64(citac[Konstante.TabelaTipKredita.PK_TIP_KREDITA_ID]) + 1;
+        }
+
+        public bool Napuni(MySqlDataReader citac, ref IDomenskiObjekat objekat)
+        {
+            try
+            {
+                if (citac.Read())
+                {
+                    objekat = new TipKredita()
+                    {
+                        ID = citac.GetInt64(0),
+                        Naziv = citac.GetString(1),
+                        MinDug = citac.GetDouble(2),
+                        MaksDug = citac.GetDouble(3),
+                        VremenskiOkvir = (VremenskiOkvir)Enum.Parse(typeof(VremenskiOkvir), citac.GetString(4), true)
+                    };
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+                return false;
+            }
+        }
+
+        public bool ImaVezaniObjekat()
+        {
+            return false;
+        }
+        #endregion
     }
 
     public enum VremenskiOkvir
     {
-        ShortTerm,
-        MediumTerm,
-        LongTerm
+        Kratkorocni,
+        Srednjerocni,
+        Dugorocni
     }
 }

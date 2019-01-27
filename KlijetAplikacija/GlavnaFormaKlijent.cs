@@ -15,8 +15,6 @@ namespace KlijetAplikacija
     {
         private const string INFO_TEKST = "Projekat iz predmeta Projektovanje Softvera (FON, 2019)";
 
-        private Klijent klijent;
-
         public GlavnaFormaKlijent()
         {
             InitializeComponent();
@@ -35,10 +33,10 @@ namespace KlijetAplikacija
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        public Klijent Klijent
+        private void pbRacuni_Click(object sender, EventArgs e)
         {
-            get { return klijent; }
-            set { klijent = value; }
+            this.Hide();
+            (new MojiRacuniForma(this)).Show();
         }
     }
 }

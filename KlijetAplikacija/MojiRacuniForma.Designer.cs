@@ -68,6 +68,7 @@
             this.Controls.Add(this.lblPretrazi);
             this.Name = "MojiRacuniForma";
             this.Text = "MojiRacuniForma";
+            this.Load += new System.EventHandler(this.MojiRacuniForma_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvMojiRacuni)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

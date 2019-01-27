@@ -33,12 +33,7 @@ namespace KlijetAplikacija
 
         private void btnPrijaviSe_Click(object sender, EventArgs e)
         {
-            kontroler.PrijaviKlijenta(txtMejl.Text, txtSifra.Text,
-                new GlavnaFormaKlijent()
-                {
-                    FormBorderStyle = FormBorderStyle.FixedSingle,
-                    StartPosition = FormStartPosition.CenterScreen
-                }, this);
+            kontroler.PrijaviKlijenta(txtMejl.Text, txtSifra.Text, this);
         }
     }
 }

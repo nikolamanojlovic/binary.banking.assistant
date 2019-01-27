@@ -13,7 +13,7 @@ namespace Domen
             KRAJ,
             KLIJENT_PRIKAZI_RACUNE,
             KLIJENT_PRIKAZI_KREDITE,
-            KLIJET_PRIKAZI_TRANSAKCIJE_ZA_RACUN,
+            KLIJENT_PRIKAZI_TRANSAKCIJE_ZA_RACUN,
             ULOGUJ_KLIJENTA
         }
     }

@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 namespace Domen
 {
     [Serializable]
-    public class Admin : Osoba
+    public class Admin : Osoba, IDomenskiObjekat
     {
         private string pozicija;
 
@@ -19,12 +19,49 @@ namespace Domen
         #endregion
 
         #region Metode
-        public override bool ImaVezaniObjekat()
+        public string VratiNazivPK()
         {
-            return false;
+            return Konstante.TabelaAdmin.PK_ADMIN_ID;
         }
 
-        public override bool Napuni(MySqlDataReader citac, ref IDomenskiObjekat objekat)
+        public string VratiNazivTabele()
+        {
+            return Konstante.TabelaAdmin.NAZIV_TABELE;
+        }
+
+        public string VratiVrednostiZaUbacivanje()
+        {
+            return String.Format(Konstante.TabelaAdmin.TABELA_ADMIN_UBACI, this.id, this.jmbg, this.ime, this.prezime, this.mejl,
+                   this.telefon, this.sifra, this.pozicija);
+        }
+
+        public string VratiUslovZaNadjiSlog()
+        {
+            return Konstante.TabelaAdmin.POLJE_EMAIL + "='" + Mejl + "'";
+        }
+
+        public string VratiAtributPretrazivanja()
+        {
+            return Konstante.TabelaAdmin.PK_ADMIN_ID;
+        }
+
+        public string PostaviVrednostAtributa()
+        {
+            return String.Format(Konstante.TabelaAdmin.TABELA_ADMIN_POSTAVI, this.id, this.jmbg, this.ime, this.prezime, this.mejl,
+                                 this.telefon, this.sifra, this.pozicija);
+        }
+
+        public void PostaviPocetniBroj(ref IDomenskiObjekat objekat)
+        {
+            (objekat as Admin).ID = 0;
+        }
+
+        public void PovecajBroj(MySqlDataReader citac, ref IDomenskiObjekat objekat)
+        {
+            (objekat as Admin).ID = Convert.ToInt64(citac[Konstante.TabelaAdmin.PK_ADMIN_ID]) + 1;
+        }
+
+        public bool Napuni(MySqlDataReader citac, ref IDomenskiObjekat objekat)
         {
             try
             {
@@ -52,74 +89,10 @@ namespace Domen
             }
         }
 
-        public override string VratiNazivPK()
+        public bool ImaVezaniObjekat()
         {
-            return Konstante.TabelaAdmin.PK_ADMIN_ID;
+            return false;
         }
-
-        public override string VratiNazivTabele()
-        {
-            return Konstante.TabelaAdmin.NAZIV_TABELE;
-        }
-
-        public override string VratiUslovZaNadjiSlog()
-        {
-            return Konstante.TabelaAdmin.POLJE_EMAIL + "='" + Mejl + "'";
-        }
-
-        public override string VratiVrednostiZaUbacivanje()
-        {
-            return String.Format(Konstante.TabelaKlijent.TABELA_KLIJENT_UBACI, this.id, this.jmbg, this.ime, this.prezime, this.mejl,
-                   this.telefon, this.sifra, this.pozicija);
-        }
-
-        public override string VratiAtributPretrazivanja()
-        {
-            return Konstante.TabelaAdmin.PK_ADMIN_ID;
-        }
-
-        public override void PostaviPocetniBroj(ref IDomenskiObjekat objekat)
-        {
-            (objekat as Admin).ID = 0;
-        }
-
-        public override void PovecajBroj(MySqlDataReader citac, ref IDomenskiObjekat objekat)
-        {
-            (objekat as Admin).ID = Convert.ToInt64(citac[Konstante.TabelaAdmin.PK_ADMIN_ID]) + 1;
-        }
-
-        #region Neimplementirane
-        public override bool NapuniVezaneObjekte(MySqlDataReader citac, ref IDomenskiObjekat objekti)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string PostaviVrednostAtributa()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string VratiNazivTabeleVezanogObjekta()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string VratiUslovZaNadjiSlogove()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override List<IDomenskiObjekat> VratiVezaniObjekat()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string VratiUslovZaJoin()
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
-
         #endregion
     }
 }

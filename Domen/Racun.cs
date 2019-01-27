@@ -41,43 +41,9 @@ namespace Domen
             get { return id; }
             set { id = value; }
         }
-
-        public bool ImaVezaniObjekat()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Napuni(MySqlDataReader citac, ref IDomenskiObjekat objekat)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool NapuniVezaneObjekte(MySqlDataReader citac, ref IDomenskiObjekat objekat)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void PostaviPocetniBroj(ref IDomenskiObjekat objekat)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string PostaviVrednostAtributa()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void PovecajBroj(MySqlDataReader citac, ref IDomenskiObjekat objekat)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string VratiAtributPretrazivanja()
-        {
-            throw new NotImplementedException();
-        }
         #endregion
 
+        #region Metode
         public string VratiNazivPK()
         {
             return String.Concat(Konstante.TabelaKlijent.PK_KLIJENT_ID, Konstante.Opste.ZAREZ, Konstante.TabelaRacun.PK_RACUN_ID);
@@ -85,38 +51,68 @@ namespace Domen
 
         public string VratiNazivTabele()
         {
-            throw new NotImplementedException();
-        }
-
-        public string VratiNazivTabeleVezanogObjekta()
-        {
             return Konstante.TabelaRacun.NAZIV_TABELE;
-        }
-
-        public string VratiUslovZaJoin()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string VratiUslovZaNadjiSlog()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string VratiUslovZaNadjiSlogove()
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<IDomenskiObjekat> VratiVezaniObjekat()
-        {
-            throw new NotImplementedException();
         }
 
         public string VratiVrednostiZaUbacivanje()
         {
-          return String.Format(Konstante.TabelaRacun.TABELA_RACUN_UBACI, this.id, this.brojRacuna, this.tip, this.datumKreiranja.ToString(Konstante.SQL.FORMAT_DATUMA));
+            return String.Format(Konstante.TabelaRacun.TABELA_RACUN_UBACI, this.id, this.brojRacuna, this.tip, this.datumKreiranja.ToString(Konstante.SQL.FORMAT_DATUMA));
         }
+
+        public string VratiUslovZaNadjiSlog()
+        {
+            return Konstante.TabelaRacun.POLJE_BROJ + "LIKE '*" + BrojRacuna + "*'";
+        }
+
+        public string VratiAtributPretrazivanja()
+        {
+            return Konstante.TabelaRacun.PK_RACUN_ID;
+        }
+
+        public string PostaviVrednostAtributa()
+        {
+            return String.Format(Konstante.TabelaRacun.TABELA_RACUN_POSTAVI, this.id, this.brojRacuna, this.tip, this.datumKreiranja.ToString(Konstante.SQL.FORMAT_DATUMA));
+        }
+
+        public void PostaviPocetniBroj(ref IDomenskiObjekat objekat)
+        {
+            (objekat as Racun).ID = 0;
+        }
+
+        public void PovecajBroj(MySqlDataReader citac, ref IDomenskiObjekat objekat)
+        {
+            (objekat as Racun).ID = Convert.ToInt64(citac[Konstante.TabelaRacun.PK_RACUN_ID]) + 1;
+        }
+
+        public bool Napuni(MySqlDataReader citac, ref IDomenskiObjekat objekat)
+        {
+            try
+            {
+                if (citac.Read())
+                {
+                    objekat = new Racun()
+                    {
+                        ID = citac.GetInt64(0),
+                        BrojRacuna = citac.GetString(1),
+                        Tip = (TipRacuna)Enum.Parse(typeof(TipRacuna), citac.GetString(2), true),
+                        DatumKreiranja = DateTime.Parse(citac.GetString(3))
+                    };
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+                return false;
+            }
+        }
+
+        public bool ImaVezaniObjekat()
+        {
+            return false;
+        }
+        #endregion
     }
 
     public enum TipRacuna

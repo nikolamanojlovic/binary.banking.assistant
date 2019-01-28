@@ -69,14 +69,14 @@ namespace Domen
                 {
                     objekat = new Admin()
                     {
-                        ID = citac.GetInt64(0),
-                        JMBG = citac.GetString(1),
-                        Ime = citac.GetString(2),
-                        Prezime = citac.GetString(3),
-                        Mejl = citac.GetString(4),
-                        Telefon = citac.GetString(5),
-                        Sifra = citac.GetString(6),
-                        Pozicija = citac.GetString(7)
+                        ID = Convert.ToInt64(citac["admin_id"] as String),
+                        JMBG = citac["jmbg"] as String,
+                        Ime = citac["ime"] as String,
+                        Prezime = citac["prezime"] as String,
+                        Mejl = citac["mejl"] as String,
+                        Telefon = citac["telefon"] as String,
+                        Sifra = citac["sifra"] as String,
+                        Pozicija = citac["pozicija"] as String
                     };
                     return true;
                 }

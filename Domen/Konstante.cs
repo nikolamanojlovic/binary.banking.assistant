@@ -111,7 +111,8 @@
         {
             public static readonly string NAZIV_TABELE = "aktivirani_kredit";
             public static readonly string PK_AK_ID = "broj_kredita";
-            public static readonly string TABELA_AK_UBACI = " '{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}' ";
+            public static readonly string TABELA_AK_UBACI = " '{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}' ";
+            public static readonly string TABELA_KLIJENT_POSTAVI = " klijent_id='{0}', tip_kredita_id='{1}', broj_kredita='{2}', datum_uzimanja='{3}', rok_dospeca='{4}', datum_isplate='{5}', kamata='{6}', broj_rata='{7}'";
         }
     }
 }

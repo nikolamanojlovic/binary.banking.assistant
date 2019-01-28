@@ -92,10 +92,10 @@ namespace Domen
                 {
                     objekat = new Racun()
                     {
-                        ID = citac.GetInt64(0),
-                        BrojRacuna = citac.GetString(1),
-                        Tip = (TipRacuna)Enum.Parse(typeof(TipRacuna), citac.GetString(2), true),
-                        DatumKreiranja = DateTime.Parse(citac.GetString(3))
+                        ID = Convert.ToInt64(citac["racun_id"] as String),
+                        BrojRacuna = citac["broj_racuna"] as String,
+                        Tip = (TipRacuna)Enum.Parse(typeof(TipRacuna), citac["tip_racuna"] as String, true),
+                        DatumKreiranja = DateTime.Parse(citac["datum_kreiranja"] as String)
                     };
                     return true;
                 }

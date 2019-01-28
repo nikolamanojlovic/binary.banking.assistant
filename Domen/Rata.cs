@@ -46,7 +46,8 @@ namespace Domen
         public string VratiVrednostiZaUbacivanje()
         {
             return String.Format(Konstante.TabelaRata.TABELA_RATA_UBACI, this.rb, this.rokDospeca.ToString(Konstante.SQL.FORMAT_DATUMA),
-                                 this.transakcija.VremenskaOznaka, this.transakcija.Posiljalac.ID, this.transakcija.Primalac.ID);
+                                 this.transakcija.VremenskaOznaka, this.transakcija.SlozeniKljuc.Posiljalac.ID, this.transakcija.SlozeniKljuc.RacunPosiljaoca.ID,
+                                 this.transakcija.SlozeniKljuc.Primalac.ID, this.transakcija.SlozeniKljuc.RacunPrimaoca.ID);
         }
 
         public string VratiUslovZaNadjiSlog()
@@ -62,7 +63,8 @@ namespace Domen
         public string PostaviVrednostAtributa()
         {
             return String.Format(Konstante.TabelaRata.TABELA_RATA_POSTAVI, this.rb, this.rokDospeca.ToString(Konstante.SQL.FORMAT_DATUMA),
-                                 this.transakcija.VremenskaOznaka, this.transakcija.Posiljalac.ID, this.transakcija.Primalac.ID);
+                                 this.transakcija.VremenskaOznaka, this.transakcija.SlozeniKljuc.Posiljalac.ID, this.transakcija.SlozeniKljuc.RacunPosiljaoca.ID,
+                                 this.transakcija.SlozeniKljuc.Primalac.ID, this.transakcija.SlozeniKljuc.RacunPrimaoca.ID);
         }
 
         public void PostaviPocetniBroj(ref IDomenskiObjekat objekat)
@@ -81,11 +83,14 @@ namespace Domen
             {
                 if (citac.Read())
                 {
+                    IDomenskiObjekat trans = new Transakcija();
+                    trans.Napuni(citac, ref trans);
+
                     objekat = new Rata()
                     {
-                        /** ????*/
-                        RB = citac.GetInt64(0),
-                        RokDospeca = DateTime.Parse(citac.GetString(1))
+                        RB = Convert.ToInt64(citac["redni_broj"] as String),
+                        RokDospeca = DateTime.Parse(citac["rok_dospeca"] as String),
+                        Transakcija = trans as Transakcija
                     };
                     return true;
                 }

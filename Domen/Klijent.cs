@@ -90,16 +90,16 @@ namespace Domen
                 {
                     objekat = new Klijent()
                     {
-                        ID = citac.GetInt64(0),
-                        JMBG = citac.GetString(1),
-                        Ime = citac.GetString(2),
-                        Prezime = citac.GetString(3),
-                        Mejl = citac.GetString(4),
-                        Telefon = citac.GetString(5),
-                        Sifra = citac.GetString(6),
-                        Ulica = citac.GetString(7),
-                        BrojKuce = citac.GetInt32(8),
-                        Grad = citac.GetString(9)
+                        ID = Convert.ToInt64(citac["klijent_id"] as String),
+                        JMBG = citac["jmbg"] as String,
+                        Ime = citac["ime"] as String,
+                        Prezime = citac["prezime"] as String,
+                        Mejl = citac["mejl"] as String,
+                        Telefon = citac["telefon"] as String,
+                        Sifra = citac["sifra"] as String,
+                        Ulica = citac["ulica"] as String,
+                        BrojKuce = Convert.ToInt32(citac["brojKuce"] as String),
+                        Grad = citac["grad"] as String
                     };
                     return true;
                 }

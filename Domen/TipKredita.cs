@@ -95,11 +95,11 @@ namespace Domen
                 {
                     objekat = new TipKredita()
                     {
-                        ID = citac.GetInt64(0),
-                        Naziv = citac.GetString(1),
-                        MinDug = citac.GetDouble(2),
-                        MaksDug = citac.GetDouble(3),
-                        VremenskiOkvir = (VremenskiOkvir)Enum.Parse(typeof(VremenskiOkvir), citac.GetString(4), true)
+                        ID = Convert.ToInt64(citac["tip_kredita_id"] as String),
+                        Naziv = citac["tip_kredita_id"] as String,
+                        MinDug = Convert.ToDouble(citac["min_dug"] as String),
+                        MaksDug = Convert.ToDouble(citac["max_dug"] as String),
+                        VremenskiOkvir = (VremenskiOkvir)Enum.Parse(typeof(VremenskiOkvir), citac["vremenski_okvir"] as String, true)
                     };
                     return true;
                 }

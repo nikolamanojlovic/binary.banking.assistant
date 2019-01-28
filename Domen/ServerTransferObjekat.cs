@@ -30,10 +30,5 @@ namespace Domen
             get { return rezultat; }
             set { rezultat = value; }
         }
-
-        public static explicit operator List<object>(ServerTransferObjekat v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

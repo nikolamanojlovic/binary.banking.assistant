@@ -8,30 +8,15 @@ namespace Domen
     [Serializable]
     public class Transakcija : IDomenskiAgregiraniObjekat
     {
+        private SlozeniKljucTransakcije slozeniKljuc;
         private DateTime vremenskaOznaka;
-        private Klijent posiljalac;
-        private Racun racunPosiljaoca;
-        private Klijent primalac;
-        private Racun racunPrimaoca;
         private double iznos;
 
         #region Get, Set
-        public double Iznos
+        public SlozeniKljucTransakcije SlozeniKljuc
         {
-            get { return iznos; }
-            set { iznos = value; }
-        }
-
-        public Racun RacunPrimaoca
-        {
-            get { return racunPrimaoca; }
-            set { racunPrimaoca = value; }
-        }
-
-        public Racun RacunPosiljaoca
-        {
-            get { return racunPosiljaoca; }
-            set { racunPosiljaoca = value; }
+            get { return slozeniKljuc; }
+            set { slozeniKljuc = value; }
         }
 
         public DateTime VremenskaOznaka
@@ -40,16 +25,10 @@ namespace Domen
             set { vremenskaOznaka = value; }
         }
 
-        public Klijent Primalac
+        public double Iznos
         {
-            get { return primalac; }
-            set { primalac = value; }
-        }
-
-        public Klijent Posiljalac
-        {
-            get { return posiljalac; }
-            set { posiljalac = value; }
+            get { return iznos; }
+            set { iznos = value; }
         }
         #endregion
 
@@ -66,22 +45,22 @@ namespace Domen
 
         public string VratiVrednostiZaUbacivanje()
         {
-            return String.Format(Konstante.TabelaTransakcija.TABELA_TRASAKCIJA_UBACI, this.vremenskaOznaka, this.posiljalac.ID, this.racunPosiljaoca.ID,
-                                 this.primalac.ID, this.racunPrimaoca.ID, this.iznos);
+            return String.Format(Konstante.TabelaTransakcija.TABELA_TRASAKCIJA_UBACI, this.vremenskaOznaka, this.slozeniKljuc.Posiljalac.ID, this.slozeniKljuc.RacunPosiljaoca.ID,
+                                 this.slozeniKljuc.Primalac.ID, this.slozeniKljuc.RacunPrimaoca.ID, this.iznos);
         }
 
         public string VratiUslovZaNadjiSlog()
         {
-            if ( Primalac == null )
+            if ( SlozeniKljuc.Primalac == null )
             {
-                return Konstante.TabelaTransakcija.POLJE_POSILJALAC + "='" + Posiljalac.ID + "'";
+                return Konstante.TabelaTransakcija.POLJE_POSILJALAC + "='" + SlozeniKljuc.Posiljalac.ID + "'";
             } else
             {
                 return String.Join(" ", new string[] 
                 {
-                    Konstante.TabelaTransakcija.POLJE_POSILJALAC + "='" + Posiljalac.ID + "'",
+                    Konstante.TabelaTransakcija.POLJE_POSILJALAC + "='" + SlozeniKljuc.Posiljalac.ID + "'",
                     Konstante.SQL.AND,
-                    Konstante.TabelaTransakcija.POLJE_PRIMALAC + "='" + Primalac.ID + "'"
+                    Konstante.TabelaTransakcija.POLJE_PRIMALAC + "='" +  SlozeniKljuc.Primalac.ID + "'"
                 });
             }
         }
@@ -98,10 +77,31 @@ namespace Domen
             {
                 if (citac.Read())
                 {
-                    objekat = new Transakcija()
+                    objekat = objekat as Transakcija;
+
+                    IDomenskiObjekat pos = new Klijent();
+                    pos.Napuni(citac, ref pos);
+
+                    IDomenskiObjekat posr = new Racun();
+                    posr.Napuni(citac, ref posr);
+
+                    IDomenskiObjekat prim = new Klijent();
+                    prim.Napuni(citac, ref prim);
+
+                    IDomenskiObjekat primr = new Racun();
+                    primr.Napuni(citac, ref primr);
+
+                    Transakcija transakcija = new Transakcija()
                     {
-                        VremenskaOznaka = DateTime.Parse(citac.GetString(0)),
-                        Iznos = citac.GetDouble(8)
+                        SlozeniKljuc = new SlozeniKljucTransakcije()
+                        {
+                            Posiljalac = pos as Klijent,
+                            Primalac = prim as Klijent,
+                            RacunPosiljaoca = posr as Racun,
+                            RacunPrimaoca = primr as Racun
+                        },
+                        VremenskaOznaka = DateTime.Parse(citac["vremenska_oznaka"] as String),
+                        Iznos = Double.Parse(citac["iznos"] as String)
                     };
                     return true;
                 }
@@ -127,12 +127,12 @@ namespace Domen
                 String.Format(Konstante.SQL.JOIN, new String[] 
                 {
                     Konstante.TabelaRacun.NAZIV_TABELE,
-                    Konstante.TabelaTransakcija.POLJE_POSILJALAC + "='" + Posiljalac.ID + "' "
+                    Konstante.TabelaTransakcija.POLJE_POSILJALAC + "='" + SlozeniKljuc.Posiljalac.ID + "' "
                 }),
                 String.Format(Konstante.SQL.JOIN, new String[]
                 {
                     Konstante.TabelaRacun.NAZIV_TABELE,
-                    Konstante.TabelaTransakcija.POLJE_PRIMALAC + "='" + Primalac.ID + "' "
+                    Konstante.TabelaTransakcija.POLJE_PRIMALAC + "='" + SlozeniKljuc.Primalac.ID + "' "
                 })
             });
         }

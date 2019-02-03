@@ -13,6 +13,7 @@ namespace ServerAplikacija
         private NetworkStream tok;
         private BinaryFormatter formater;
         private bool kraj;
+        private Osoba ulogovani;
 
         public ObradaKlijenta(NetworkStream tok)
         {
@@ -36,7 +37,7 @@ namespace ServerAplikacija
                 while (!kraj)
                 {
                     KlijentTransferObjekat zahtev = formater.Deserialize(tok) as KlijentTransferObjekat;
-                    ServerTransferObjekat odgovor;
+                    ServerTransferObjekat odgovor = null;
 
                     switch(zahtev.Operacija)
                     {
@@ -58,9 +59,9 @@ namespace ServerAplikacija
                                     Rezultat = 1,
                                     Objekat = klijent
                                 };
+                                ulogovani = klijent as Klijent;
                             }
-                            
-                            formater.Serialize(tok, odgovor);
+
                             break;
                         case Operacija.KLIJENT_PRIKAZI_RACUNE:
                             List<IDomenskiObjekat> racuni = KontrolerPL.DajKontroler().PronadjiKljentoveRacune(zahtev.Poruka as Klijent);
@@ -82,13 +83,36 @@ namespace ServerAplikacija
                                 };
                             }
                             break;
+                        case Operacija.KLIJENT_PRIKAZI_KREDITE:
+                            List<IDomenskiObjekat> krediti = KontrolerPL.DajKontroler().PronadjiKljentoveKredite(zahtev.Poruka as Klijent);
+
+                            if (krediti == null)
+                            {
+                                odgovor = new ServerTransferObjekat()
+                                {
+                                    Rezultat = 0
+                                };
+
+                            }
+                            else
+                            {
+                                odgovor = new ServerTransferObjekat()
+                                {
+                                    Rezultat = 1,
+                                    Objekat = krediti
+                                };
+                            }
+                            break;
                         case Operacija.KRAJ:
                             break;
                     }
+
+                    formater.Serialize(tok, odgovor);
                 }
             }
             catch (Exception ex)
             {
+                KontrolerPL.DajKontroler().DiskonektujKlijenta(ulogovani);
                 Console.Write(ex.StackTrace);
                 Console.WriteLine("Klijent se diskonektovao!");
             }

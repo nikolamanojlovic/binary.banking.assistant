@@ -9,8 +9,6 @@ namespace Domen
 {
     public interface IDomenskiSlozeniObjekat : IDomenskiObjekat
     {
-        // Vraca vredost za WHERE slabog objekta
-        String VratiUslovZaNadjiSlogove();
         // Vraca instancu slabog objekta
         IDomenskiObjekat VratiVezaniObjekat();
         // Vraca slab objekta

@@ -2,10 +2,6 @@
 using SistemskeOperacije;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using static ServerAplikacija.ServerForma;
 
 namespace ServerAplikacija
@@ -19,12 +15,12 @@ namespace ServerAplikacija
         public static KontrolerPL kontroler;
 
         private ServerForma forma;
-        private List<Osoba> ulgovani;
+        private List<Osoba> ulogovani;
 
         #region Singlton, Get, Set
         private KontrolerPL()
         {
-            ulgovani = new List<Osoba>();
+            ulogovani = new List<Osoba>();
         }
 
         public static KontrolerPL DajKontroler()
@@ -44,8 +40,8 @@ namespace ServerAplikacija
 
         public List<Osoba> Ulogovani
         {
-            get { return ulgovani; }
-            set { ulgovani = value; }
+            get { return ulogovani; }
+            set { ulogovani = value; }
         }
         #endregion
 
@@ -63,7 +59,7 @@ namespace ServerAplikacija
                 {
                     OsveziLog(String.Format(USPESNA_PRIJAVA, mejl));
                     Ulogovani.Add(klijent);
-                    OsveziUlogovane(Ulogovani);
+                    OsveziUlogovane();
                     return klijent as IDomenskiObjekat;
                 }
             } else
@@ -79,7 +75,7 @@ namespace ServerAplikacija
                     {
                         OsveziLog(String.Format(USPESNA_PRIJAVA, mejl));
                         Ulogovani.Add(admin);
-                        OsveziUlogovane(Ulogovani);
+                        OsveziUlogovane();
                         return admin as IDomenskiObjekat;
                     }
                 }
@@ -92,7 +88,14 @@ namespace ServerAplikacija
         {
             VratiRacuneSO vratiRacuneSo = new VratiRacuneSO();
             vratiRacuneSo.IzvrsiSO(klijent);
-            return null;
+            return (List<IDomenskiObjekat>) vratiRacuneSo.Rezultat;
+        }
+
+        public List<IDomenskiObjekat> PronadjiKljentoveKredite(Klijent klijent)
+        {
+            VratiKrediteSO vratiKrediteSO = new VratiKrediteSO();
+            vratiKrediteSO.IzvrsiSO(klijent);
+            return (List<IDomenskiObjekat>) vratiKrediteSO.Rezultat;
         }
 
         public void OsveziLog(string poruka)
@@ -100,9 +103,15 @@ namespace ServerAplikacija
             Forma.Invoke(new OsveziLogCallback(Forma.OsveziLog), poruka);
         }
 
-        public void OsveziUlogovane(List<Osoba> uglogovani)
+        public void OsveziUlogovane()
         {
-            Forma.Invoke(new OsveziUlogovaneCallback(Forma.OsveziUlogovane), ulgovani);
+            Forma.Invoke(new OsveziUlogovaneCallback(Forma.OsveziUlogovane), ulogovani);
+        }
+
+        public void DiskonektujKlijenta(Osoba ulogovan)
+        {
+            ulogovani.RemoveAll(x => x.Mejl.Equals(ulogovan.Mejl));
+            OsveziUlogovane();
         }
     }
 }

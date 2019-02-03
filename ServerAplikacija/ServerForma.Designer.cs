@@ -107,6 +107,7 @@
             this.Controls.Add(this.lblStatus);
             this.Name = "ServerForma";
             this.Text = "BBA - Server";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ServerForma_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.dgvAktivni)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -35,5 +35,10 @@ namespace KlijetAplikacija
         {
             kontroler.PrijaviKlijenta(txtMejl.Text, txtSifra.Text, this);
         }
+
+        private void Prijava_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

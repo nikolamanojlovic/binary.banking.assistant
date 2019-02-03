@@ -19,9 +19,9 @@ namespace Domen
         #endregion
 
         #region Metode
-        public string VratiNazivPK()
+        public string VratiPK()
         {
-            return Konstante.TabelaAdmin.PK_ADMIN_ID;
+            return String.Format(" {0}, ", this.id);
         }
 
         public string VratiNazivTabele()
@@ -92,6 +92,11 @@ namespace Domen
         public bool ImaVezaniObjekat()
         {
             return false;
+        }
+
+        public string VratiUslovZaNadjiSlogove()
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

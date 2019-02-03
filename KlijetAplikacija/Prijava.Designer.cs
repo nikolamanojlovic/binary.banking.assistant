@@ -31,11 +31,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Prijava));
             this.PictureLogo = new System.Windows.Forms.PictureBox();
             this.gbDobrodosli = new System.Windows.Forms.GroupBox();
+            this.btnPrijaviSe = new System.Windows.Forms.Button();
             this.txtSifra = new System.Windows.Forms.TextBox();
             this.txtMejl = new System.Windows.Forms.TextBox();
             this.lblSifra = new System.Windows.Forms.Label();
             this.lblMejl = new System.Windows.Forms.Label();
-            this.btnPrijaviSe = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.PictureLogo)).BeginInit();
             this.gbDobrodosli.SuspendLayout();
             this.SuspendLayout();
@@ -65,6 +65,16 @@
             this.gbDobrodosli.TabIndex = 1;
             this.gbDobrodosli.TabStop = false;
             this.gbDobrodosli.Text = "Dobrodošli";
+            // 
+            // btnPrijaviSe
+            // 
+            this.btnPrijaviSe.Location = new System.Drawing.Point(215, 82);
+            this.btnPrijaviSe.Name = "btnPrijaviSe";
+            this.btnPrijaviSe.Size = new System.Drawing.Size(75, 23);
+            this.btnPrijaviSe.TabIndex = 4;
+            this.btnPrijaviSe.Text = "Prijavi se";
+            this.btnPrijaviSe.UseVisualStyleBackColor = true;
+            this.btnPrijaviSe.Click += new System.EventHandler(this.btnPrijaviSe_Click);
             // 
             // txtSifra
             // 
@@ -98,16 +108,6 @@
             this.lblMejl.TabIndex = 0;
             this.lblMejl.Text = "E-mail:";
             // 
-            // btnPrijaviSe
-            // 
-            this.btnPrijaviSe.Location = new System.Drawing.Point(215, 82);
-            this.btnPrijaviSe.Name = "btnPrijaviSe";
-            this.btnPrijaviSe.Size = new System.Drawing.Size(75, 23);
-            this.btnPrijaviSe.TabIndex = 4;
-            this.btnPrijaviSe.Text = "Prijavi se";
-            this.btnPrijaviSe.UseVisualStyleBackColor = true;
-            this.btnPrijaviSe.Click += new System.EventHandler(this.btnPrijaviSe_Click);
-            // 
             // Prijava
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -117,6 +117,7 @@
             this.Controls.Add(this.PictureLogo);
             this.Name = "Prijava";
             this.Text = "BBA - Prijava";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Prijava_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.PictureLogo)).EndInit();
             this.gbDobrodosli.ResumeLayout(false);
             this.gbDobrodosli.PerformLayout();

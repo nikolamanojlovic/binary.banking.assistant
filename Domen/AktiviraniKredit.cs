@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.SqlClient;
 
 namespace Domen
@@ -19,6 +20,7 @@ namespace Domen
         private List<Rata> rata;
 
         #region Get, Set
+        [Browsable(false)]
         public List<Rata> Rata
         {
             get { return rata; }
@@ -31,42 +33,49 @@ namespace Domen
             set { kamata = value; }
         }
 
+        [DisplayName("Datum isplate")]
         public DateTime DatumIsplate
         {
             get { return datumIsplate; }
             set { datumIsplate = value; }
         }
 
+        [DisplayName("Rok dospeća")]
         public DateTime RokDospeca
         {
             get { return rokDospeca; }
             set { rokDospeca = value; }
         }
 
+        [DisplayName("Datum uzimanja")]
         public DateTime DatumUzimanja
         {
             get { return datumUzimanja; }
             set { datumUzimanja = value; }
         }
 
+        [Browsable(false)]
         public int BRKredita
         {
             get { return brKredita; }
             set { brKredita = value; }
         }
 
+        [DisplayName("Tip kredita")]
         public TipKredita TipKredita
         {
             get { return tipKredita; }
             set { tipKredita = value; }
         }
 
+        [DisplayName("Klijent")]
         public Klijent Klijent
         {
             get { return klijent; }
             set { klijent = value; }
         }
 
+        [DisplayName("Broj rata")]
         public int BrojRata
         {
             get { return brojRata; }
@@ -75,9 +84,9 @@ namespace Domen
         #endregion
 
         #region Metode
-        public string VratiNazivPK()
+        public string VratiPK()
         {
-            return Konstante.TabelaAktiviraniKredit.PK_AK_ID;
+            return String.Join(" {0}, {1}, {2}, ", new string[] { Convert.ToString(this.klijent.ID), Convert.ToString(this.tipKredita.ID), Convert.ToString(brKredita) });
         }
 
         public string VratiNazivTabele()
@@ -121,35 +130,38 @@ namespace Domen
         {
             try
             {
-                if (citac.Read())
+                IDomenskiObjekat k = new Klijent();
+                k.Napuni(citac, ref k);
+
+                IDomenskiObjekat tk = new TipKredita();
+                tk.Napuni(citac, ref tk);
+
+                objekat = new AktiviraniKredit()
                 {
-                    IDomenskiObjekat k = new Klijent();
-                    k.Napuni(citac, ref k);
+                    Klijent = k as Klijent,
+                    TipKredita = tk as TipKredita,
+                    BRKredita = Convert.ToInt32(citac["broj_kredita"] as String),
+                    DatumUzimanja = DateTime.Parse(Convert.ToString(citac["datum_uzimanja"])),
+                    RokDospeca = DateTime.Parse(Convert.ToString(citac["rok_dospeca"])),
+                    kamata = Convert.ToDouble(citac["kamata"]),
+                    brojRata = Convert.ToInt32(citac["broj_rata"])
+                };
 
-                    IDomenskiObjekat tk = new TipKredita();
-                    tk.Napuni(citac, ref tk);
-
-                    objekat = new AktiviraniKredit()
-                    {
-                        Klijent = k as Klijent,
-                        TipKredita = tk as TipKredita,
-                        BRKredita = Convert.ToInt32(citac["broj_kredita"] as String),
-                        DatumUzimanja = DateTime.Parse(citac["datum_uzimanja"] as String),
-                        RokDospeca = DateTime.Parse(citac["rok_dospeca"] as String),
-                        DatumIsplate = DateTime.Parse(citac["datum_isplate"] as String),
-                        kamata = Convert.ToDouble(citac["kamata"] as String),
-                        brojRata = Convert.ToInt32(citac["broj_rata"] as String)
-                    };
-
-                    return true;
+                try
+                {
+                    (objekat as AktiviraniKredit).DatumIsplate = DateTime.Parse(Convert.ToString(citac["datum_isplate"]));
                 }
-                return false;
+                catch (FormatException ex)
+                {
+                    (objekat as AktiviraniKredit).DatumIsplate = DateTime.MaxValue;
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.StackTrace);
                 return false;
             }
+            return true;
         }
 
         public bool ImaVezaniObjekat()
@@ -208,6 +220,11 @@ namespace Domen
                     Konstante.TabelaTipKredita.PK_TIP_KREDITA_ID + "='" + TipKredita.ID + "' "
                 })
             });
+        }
+
+        public IDomenskiObjekat VratiAgregiraniObjekat()
+        {
+            throw new NotImplementedException();
         }
         #endregion
         #endregion

@@ -36,7 +36,26 @@ namespace KlijetAplikacija
         private void pbRacuni_Click(object sender, EventArgs e)
         {
             this.Hide();
-            (new MojiRacuniForma(this)).Show();
+            (new MojiRacuniForma(this)
+            {
+                FormBorderStyle = FormBorderStyle.FixedSingle,
+                StartPosition = FormStartPosition.CenterScreen
+            }).Show();
+        }
+
+        private void pbKrediti_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            (new MojiKreditiForma(this)
+            {
+                FormBorderStyle = FormBorderStyle.FixedSingle,
+                StartPosition = FormStartPosition.CenterScreen
+            }).Show();
+        }
+
+        private void GlavnaFormaKlijent_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

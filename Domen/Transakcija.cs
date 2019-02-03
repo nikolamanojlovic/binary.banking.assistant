@@ -33,9 +33,9 @@ namespace Domen
         #endregion
 
         #region Metodes
-        public string VratiNazivPK()
+        public string VratiPK()
         {
-            return Konstante.TabelaTransakcija.PK_TRANSAKCIJA_ID;
+            return String.Format(" {0}, {1}, {2}, {3}, ", this.vremenskaOznaka, this.slozeniKljuc.Posiljalac.ID, this.slozeniKljuc.RacunPosiljaoca.ID, this.slozeniKljuc.Primalac.ID);
         }
 
         public string VratiNazivTabele()
@@ -150,6 +150,16 @@ namespace Domen
         }
 
         public string VratiAtributPretrazivanja()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDomenskiObjekat VratiAgregiraniObjekat()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string VratiUslovZaNadjiSlogove()
         {
             throw new NotImplementedException();
         }

@@ -4,13 +4,13 @@
     {
         public static class Opste
         {
-            public static readonly string ZAREZ = ",";
+            public static readonly string ZAREZ = ", ";
             public static readonly string CRNA_TACKA = "\u2022";
         }
 
         public static class SQL
         {
-            public static readonly string FORMAT_DATUMA = "yyyy-MM-dd HH:mm:ss.fff";
+            public static readonly string FORMAT_DATUMA = "MM/dd/yyyy HH:mm:ss";
             public static readonly string INSERT_INTO = " INSERT INTO ";
             public static readonly string VALUES = " ( {0} ) ";
             public static readonly string DELETE_FROM = " DELETE {0} FROM ";
@@ -109,7 +109,7 @@
 
         public static class TabelaAktiviraniKredit
         {
-            public static readonly string NAZIV_TABELE = "aktivirani_kredit";
+            public static readonly string NAZIV_TABELE = "aktivni_kredit";
             public static readonly string PK_AK_ID = "broj_kredita";
             public static readonly string TABELA_AK_UBACI = " '{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}' ";
             public static readonly string TABELA_KLIJENT_POSTAVI = " klijent_id='{0}', tip_kredita_id='{1}', broj_kredita='{2}', datum_uzimanja='{3}', rok_dospeca='{4}', datum_isplate='{5}', kamata='{6}', broj_rata='{7}'";

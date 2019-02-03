@@ -47,9 +47,9 @@ namespace Domen
         #endregion
 
         #region Metode
-        public string VratiNazivPK()
+        public string VratiPK()
         {
-            return Konstante.TabelaTipKredita.PK_TIP_KREDITA_ID;
+            return String.Format(" {0}, ", Convert.ToString(this.id));
         }
 
         public string VratiNazivTabele()
@@ -91,19 +91,16 @@ namespace Domen
         {
             try
             {
-                if (citac.Read())
+                objekat = new TipKredita()
                 {
-                    objekat = new TipKredita()
-                    {
-                        ID = Convert.ToInt64(citac["tip_kredita_id"] as String),
-                        Naziv = citac["tip_kredita_id"] as String,
-                        MinDug = Convert.ToDouble(citac["min_dug"] as String),
-                        MaksDug = Convert.ToDouble(citac["max_dug"] as String),
-                        VremenskiOkvir = (VremenskiOkvir)Enum.Parse(typeof(VremenskiOkvir), citac["vremenski_okvir"] as String, true)
-                    };
-                    return true;
-                }
-                return false;
+                    ID = Convert.ToInt64(citac["tip_kredita_id"]),
+                    Naziv = Convert.ToString(citac["naziv"]),
+                    MinDug = Convert.ToDouble(citac["min_dug"]),
+                    MaksDug = Convert.ToDouble(citac["max_dug"]),
+                    VremenskiOkvir = (VremenskiOkvir)Enum.Parse(typeof(VremenskiOkvir), Convert.ToString(citac["vremenski_okvir"]), true)
+                };
+                return true;
+
             }
             catch (Exception ex)
             {
@@ -116,7 +113,29 @@ namespace Domen
         {
             return false;
         }
+
+        public IDomenskiObjekat vratiAgregiraniObjekat()
+        {
+            return new AktiviraniKredit();
+        }
+
+        #region Neimplementirane
+        public string VratiVrednostiZaJoin()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string VratiUslovZaNadjiSlogove()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
+        #endregion
+
+        public override string ToString()
+        {
+            return Naziv;
+        }
     }
 
     public enum VremenskiOkvir

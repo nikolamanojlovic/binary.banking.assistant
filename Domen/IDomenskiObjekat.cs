@@ -8,7 +8,7 @@ namespace Domen
     public interface IDomenskiObjekat
     {
         // Vraca naziv primarnog kljuca objekta
-        String VratiNazivPK();
+        String VratiPK();
         // Vraca naziv tabele koja predstavlja objekat u bazi
         String VratiNazivTabele();
         // Vraca vrednosti za INSERT
@@ -19,6 +19,8 @@ namespace Domen
         String VratiAtributPretrazivanja();
         // Vraca vrednost za SET
         String PostaviVrednostAtributa();
+        // Vraca vredost za WHERE slabog objekta
+        String VratiUslovZaNadjiSlogove();
         // Postavlja vrednost primarnog kljuca na 0
         void PostaviPocetniBroj(ref IDomenskiObjekat objekat);
         // Povecava vrednost primarnog kljuca za 1

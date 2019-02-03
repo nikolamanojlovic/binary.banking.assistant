@@ -139,6 +139,7 @@
             this.pbKrediti.Size = new System.Drawing.Size(109, 97);
             this.pbKrediti.TabIndex = 2;
             this.pbKrediti.TabStop = false;
+            this.pbKrediti.Click += new System.EventHandler(this.pbKrediti_Click);
             // 
             // lblIzbor
             // 
@@ -169,7 +170,8 @@
             this.Controls.Add(this.lblIzbor);
             this.Controls.Add(this.tableLayout);
             this.Name = "GlavnaFormaKlijent";
-            this.Text = "BBA - {0} {1}";
+            this.Text = " ";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.GlavnaFormaKlijent_FormClosed);
             this.tableLayout.ResumeLayout(false);
             this.tableLayout.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbTransakcije)).EndInit();

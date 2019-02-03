@@ -76,7 +76,7 @@ namespace Sesija
         {
             try
             {
-                Komanda.CommandText = Konstante.SQL.INSERT_INTO + odo.VratiNazivTabele() + 
+                Komanda.CommandText = Konstante.SQL.INSERT_INTO + odo.VratiNazivTabele() +
                                       String.Format(Konstante.SQL.VALUES, odo.VratiVrednostiZaUbacivanje());
                 Komanda.CommandType = CommandType.Text;
                 Komanda.ExecuteNonQuery();
@@ -189,7 +189,11 @@ namespace Sesija
                     Poruka = Konstante.DB.SLOG_NE_POSTOJI;
                     return null;
                 }
-                odo.Napuni(Citac, ref odo);
+
+                if (Citac.Read())
+                {
+                    odo.Napuni(Citac, ref odo);
+                }
                 Poruka = Konstante.DB.SLOG_POSTOJI;
             }
             catch (Exception ex)
@@ -208,28 +212,35 @@ namespace Sesija
             {
                 IDomenskiObjekat slab = (odo as IDomenskiSlozeniObjekat).VratiVezaniObjekat();
 
-                if (!String.IsNullOrEmpty(slab.VratiUslovZaNadjiSlog()))
-                {
-                    Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, Konstante.SQL.ALL) + slab.VratiNazivTabele() +
-                    String.Format(Konstante.SQL.WHERE, new String[]
-                                            {
-                                                (odo as IDomenskiSlozeniObjekat).VratiUslovZaNadjiSlogove(),
-                                                Konstante.SQL.AND,
-                                                slab.VratiUslovZaNadjiSlog()
-                                            });
-                }
-                else
-                {
-                    Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, Konstante.SQL.ALL) + slab.VratiNazivTabele() +
-                    String.Format(Konstante.SQL.WHERE, (odo as IDomenskiSlozeniObjekat).VratiUslovZaNadjiSlogove());
-                }
 
+                Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, Konstante.SQL.ALL) + slab.VratiNazivTabele() +
+                String.Format(Konstante.SQL.WHERE, odo.VratiUslovZaNadjiSlogove());
                 Komanda.CommandType = CommandType.Text;
                 Citac = Komanda.ExecuteReader();
                 Poruka = (odo as IDomenskiSlozeniObjekat).NapuniVezaneObjekte(Citac, ref odo)
                          ? Konstante.DB.VEZANI_SLOG_USPESNO_PROCITAN : Konstante.DB.VEZANI_SLOG_NEUSPESNO_PROCITAN;
             }
             return (odo as IDomenskiSlozeniObjekat).VratiVezaneObjekte();
+        }
+
+        public List<IDomenskiObjekat> NadjiAgregiraneSlogoveIVratiIh(IDomenskiObjekat odo)
+        {
+            List<IDomenskiObjekat> agregirani = new List<IDomenskiObjekat>();
+            IDomenskiObjekat agr = (odo as IDomenskiAgregiraniObjekat).VratiAgregiraniObjekat();
+
+            Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, Konstante.SQL.ALL) + agr.VratiNazivTabele() +
+                                  (odo as IDomenskiAgregiraniObjekat).VratiVrednostiZaJoin() +
+                                  String.Format(Konstante.SQL.WHERE, agr.VratiNazivTabele() + "." + odo.VratiUslovZaNadjiSlogove());
+            Komanda.CommandType = CommandType.Text;
+            Citac = Komanda.ExecuteReader();
+
+            while (Citac.Read())
+            {
+                IDomenskiObjekat objekat = (odo as IDomenskiAgregiraniObjekat).VratiAgregiraniObjekat();
+                objekat.Napuni(Citac, ref objekat);
+                agregirani.Add(objekat);
+            }
+            return agregirani;
         }
 
         public bool PamtiSlozeniSlog(IDomenskiObjekat odo)
@@ -241,10 +252,14 @@ namespace Sesija
                 Komanda.CommandType = CommandType.Text;
                 Komanda.ExecuteNonQuery();
 
-                foreach(IDomenskiObjekat vezani in (odo as IDomenskiSlozeniObjekat).VratiVezaneObjekte())
+                foreach (IDomenskiObjekat vezani in (odo as IDomenskiSlozeniObjekat).VratiVezaneObjekte())
                 {
                     Komanda.CommandText = Konstante.SQL.INSERT_INTO + vezani.VratiNazivTabele() +
-                                          String.Format(Konstante.SQL.VALUES, vezani.VratiVrednostiZaUbacivanje());
+                                          String.Format(Konstante.SQL.VALUES, new String[]
+                                          {
+                                              odo.VratiPK(),
+                                              vezani.VratiVrednostiZaUbacivanje()
+                                          });
                     Komanda.CommandType = CommandType.Text;
                     Komanda.ExecuteNonQuery();
                 }

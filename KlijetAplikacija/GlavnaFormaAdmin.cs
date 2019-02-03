@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domen;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,17 @@ namespace KlijetAplikacija
         public GlavnaFormaAdmin()
         {
             InitializeComponent();
+        }
+
+        private void GlavnaFormaAdmin_Load(object sender, EventArgs e)
+        {
+            this.txtImePrezimeAdmina.Text = String.Join(" ", new String[]
+            {
+                Komunikacija.DajKomunikaciju().VratiSesiju().Ime,
+                Komunikacija.DajKomunikaciju().VratiSesiju().Prezime
+            });
+            this.txtMejlAdmina.Text = (Komunikacija.DajKomunikaciju().VratiSesiju() as Admin).Mejl;
+            this.txtPozicijaAdmina.Text = (Komunikacija.DajKomunikaciju().VratiSesiju() as Admin).Pozicija;
         }
     }
 }

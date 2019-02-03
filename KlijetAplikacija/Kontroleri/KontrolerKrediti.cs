@@ -8,38 +8,38 @@ using static Domen.Operacije;
 
 namespace KlijetAplikacija.Kontroleri
 {
-    public class KontrolerRacuni
+    public class KontrolerKrediti
     {
-        public const String RACUNI_NE_POSTOJE = "Trenutno nemate otvorene račune u našem sistemu.";
-           
-        public void PrikaziSveRacune(MojiRacuniForma mojiRacuniForma)
+        public const String KREDITI_NE_POSTOJE = "Trenutno nemate kredite u našem sistemu.";
+
+        public void PrikaziSveRacune(MojiKreditiForma mojiKreditiForma)
         {
             try
             {
                 KlijentTransferObjekat zahtev = new KlijentTransferObjekat()
                 {
-                    Operacija = Operacija.KLIJENT_PRIKAZI_RACUNE,
+                    Operacija = Operacija.KLIJENT_PRIKAZI_KREDITE,
                     Poruka = Komunikacija.DajKomunikaciju().VratiSesiju()
                 };
 
                 Komunikacija.DajKomunikaciju().PosaljiZahtev(zahtev);
                 ServerTransferObjekat odgovor = Komunikacija.DajKomunikaciju().ProcitajOdgovor();
 
-                if ( odgovor.Rezultat == 0)
+                if (odgovor.Rezultat == 0)
                 {
-                    mojiRacuniForma.PrikaziInfoPoruku(RACUNI_NE_POSTOJE);
+                    mojiKreditiForma.PrikaziInfoPoruku(KREDITI_NE_POSTOJE);
                 }
                 else
                 {
-                    List<Racun> racuni = new List<Racun>();
-                    ((List<IDomenskiObjekat>) odgovor.Objekat).ForEach(racun => racuni.Add((Racun)racun));
-                    mojiRacuniForma.PostaviSveRacune(racuni);
+                    List<AktiviraniKredit> krediti = new List<AktiviraniKredit>();
+                    ((List<IDomenskiObjekat>)odgovor.Objekat).ForEach(kredit => krediti.Add((AktiviraniKredit)kredit));
+                    mojiKreditiForma.PostaviSveKredite(krediti);
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.StackTrace);
-                mojiRacuniForma.PrikaziGreskaPoruku(Konstante.Server.SERVER_NIJE_DOSTUPAN);
+                mojiKreditiForma.PrikaziGreskaPoruku(Konstante.Server.SERVER_NIJE_DOSTUPAN);
             }
         }
     }

@@ -8,11 +8,11 @@ using static Domen.Operacije;
 
 namespace KlijetAplikacija.Kontroleri
 {
-    public class KontrolerRacuni
+    public class KontrolerTransakcije
     {
-        public const String RACUNI_NE_POSTOJE = "Trenutno nemate otvorene račune u našem sistemu.";
-           
-        public void PrikaziSveRacune(MojiRacuniForma mojiRacuniForma)
+        public const String TRANSAKCIJE_NE_POSTOJE = "Trenutno nemate transakcije u našem sistemu.";
+
+        public void PrikaziSveTransakcije(MojeTransakcijeForma mojeTransakcijeForma)
         {
             try
             {
@@ -25,21 +25,21 @@ namespace KlijetAplikacija.Kontroleri
                 Komunikacija.DajKomunikaciju().PosaljiZahtev(zahtev);
                 ServerTransferObjekat odgovor = Komunikacija.DajKomunikaciju().ProcitajOdgovor();
 
-                if ( odgovor.Rezultat == 0)
+                if (odgovor.Rezultat == 0)
                 {
-                    mojiRacuniForma.PrikaziInfoPoruku(RACUNI_NE_POSTOJE);
+                    mojeTransakcijeForma.PrikaziInfoPoruku(TRANSAKCIJE_NE_POSTOJE);
                 }
                 else
                 {
                     List<Racun> racuni = new List<Racun>();
-                    ((List<IDomenskiObjekat>) odgovor.Objekat).ForEach(racun => racuni.Add((Racun)racun));
-                    mojiRacuniForma.PostaviSveRacune(racuni);
+                    ((List<IDomenskiObjekat>)odgovor.Objekat).ForEach(racun => racuni.Add((Racun)racun));
+                    mojeTransakcijeForma.PostaviSveTransakcije(racuni);
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.StackTrace);
-                mojiRacuniForma.PrikaziGreskaPoruku(Konstante.Server.SERVER_NIJE_DOSTUPAN);
+                mojeTransakcijeForma.PrikaziGreskaPoruku(Konstante.Server.SERVER_NIJE_DOSTUPAN);
             }
         }
     }

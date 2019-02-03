@@ -83,6 +83,17 @@ CREATE TABLE rata (
 );
         
 INSERT INTO admin VALUES(0, "030303", "Nikola", "Manojlović", "nikola@gmail.com", "065555555", "nikola", "Administrator");
-INSERT INTO klijent VALUES(0, "040404", "Jovan", "Jović", "jovan@gmail.com", "064444444", "jovan", "Bulevar Oslobođenja", 5, "Beograd");
 
-SELECT * FROM Transakcija;
+INSERT INTO klijent VALUES(-1, "", "BBA Bank", "", "bba@gmail.com", "060000000", "", "Bulevar Oslobođenja", 25, "Beograd");
+INSERT INTO klijent VALUES(0, "040404", "Jovan", "Jović", "jovan@gmail.com", "064444444", "jovan", "Bulevar Oslobođenja", 5, "Beograd");
+INSERT INTO klijent VALUES(1, "050505", "Maja", "Nikolić", "maja@gmail.com", "066666666", "maja", "Milutina Milankovića", 25, "Beograd");
+
+INSERT INTO racun VALUES(0, 1, "1234567891011", "RSD", CURDATE());
+INSERT INTO racun VALUES(0, 2, "1213141516171", "RSD", CURDATE());
+INSERT INTO racun VALUES(0, 3, "1819202122232", "EUR", CURDATE());
+
+INSERT INTO tip_kredita VALUES(0, "Okvirni kredit", 1000, 10000, "Kratkorocni");
+INSERT INTO tip_kredita VALUES(1, "Stambeni kredit", 100000, 1500000, "Kratkorocni");
+
+
+SELECT * FROM klijent;

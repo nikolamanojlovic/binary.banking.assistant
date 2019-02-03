@@ -33,7 +33,7 @@ namespace Domen
         #endregion
 
         #region Metode
-        public string VratiNazivPK()
+        public string VratiPK()
         {
             return Konstante.TabelaRata.PK_RATA_ID;
         }
@@ -106,6 +106,11 @@ namespace Domen
         public bool ImaVezaniObjekat()
         {
             return false;
+        }
+
+        public string VratiUslovZaNadjiSlogove()
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

@@ -139,8 +139,14 @@ namespace ServerAplikacija
             dgvAktivni.DataSource = new BindingList<Osoba>(ulogovani);
         }
 
+        private void ServerForma_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
+        }
+
         public delegate void OsveziLogCallback(string text);
         public delegate void OsveziUlogovaneCallback(List<Osoba> ulogovani);
         #endregion
+
     }
 }

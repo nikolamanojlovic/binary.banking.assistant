@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.SqlClient;
+using System.Globalization;
 
 namespace Domen
 {
@@ -44,9 +45,9 @@ namespace Domen
         #endregion
 
         #region Metode
-        public string VratiNazivPK()
+        public string VratiPK()
         {
-            return String.Concat(Konstante.TabelaKlijent.PK_KLIJENT_ID, Konstante.Opste.ZAREZ, Konstante.TabelaRacun.PK_RACUN_ID);
+            return String.Format(" {0}, ", Convert.ToString(this.id));
         }
 
         public string VratiNazivTabele()
@@ -61,7 +62,7 @@ namespace Domen
 
         public string VratiUslovZaNadjiSlog()
         {
-            return Konstante.TabelaRacun.POLJE_BROJ + "LIKE '*" + BrojRacuna + "*'";
+            return Konstante.TabelaRacun.POLJE_BROJ + " LIKE '*" + BrojRacuna + "*'";
         }
 
         public string VratiAtributPretrazivanja()
@@ -95,7 +96,7 @@ namespace Domen
                         ID = Convert.ToInt64(citac["racun_id"] as String),
                         BrojRacuna = citac["broj_racuna"] as String,
                         Tip = (TipRacuna)Enum.Parse(typeof(TipRacuna), citac["tip_racuna"] as String, true),
-                        DatumKreiranja = DateTime.Parse(citac["datum_kreiranja"] as String)
+                        DatumKreiranja = DateTime.Parse(Convert.ToString(citac["datum_kreiranja"]))
                     };
                     return true;
                 }
@@ -111,6 +112,11 @@ namespace Domen
         public bool ImaVezaniObjekat()
         {
             return false;
+        }
+
+        public string VratiUslovZaNadjiSlogove()
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

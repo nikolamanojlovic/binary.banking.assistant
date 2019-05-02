@@ -1,5 +1,7 @@
 ## BBA - Binary Banking Assistent
 
+Small client-server application for bank assistents and clients.
+
 ### Logo
 
 ![logo](https://user-images.githubusercontent.com/17787973/57099331-7f136480-6d1c-11e9-982a-306c4552263f.png)

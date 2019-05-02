@@ -100,6 +100,7 @@
             this.pbTransakcije.Size = new System.Drawing.Size(110, 97);
             this.pbTransakcije.TabIndex = 3;
             this.pbTransakcije.TabStop = false;
+            this.pbTransakcije.Click += new System.EventHandler(this.pbTransakcije_Click);
             // 
             // pbRacuni
             // 
@@ -169,6 +170,7 @@
             this.Controls.Add(this.lblRazvijeno);
             this.Controls.Add(this.lblIzbor);
             this.Controls.Add(this.tableLayout);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "GlavnaFormaKlijent";
             this.Text = " ";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.GlavnaFormaKlijent_FormClosed);

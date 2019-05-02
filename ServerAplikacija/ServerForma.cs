@@ -141,6 +141,7 @@ namespace ServerAplikacija
 
         private void ServerForma_FormClosed(object sender, FormClosedEventArgs e)
         {
+            ZaustaviServer();
             Application.Exit();
         }
 

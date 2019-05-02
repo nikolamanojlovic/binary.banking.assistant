@@ -10,10 +10,24 @@ namespace SistemskeOperacije
 {
     public class VratiRacuneSO : OpstaSO
     {
-        protected override bool Izvrsi(IDomenskiObjekat objekat)
+        private const String kriterijumRacuna = " broj_racuna LIKE '%{0}%' ";
+
+        protected override bool Izvrsi(IDomenskiObjekat objekat, string kriterijum, string sifraJakog)
         {
-            Rezultat = Broker.DajInstancu().NadjiVezaneSlogoveIVratiIh(objekat as Klijent);
+            Klijent klijent = objekat as Klijent;
+            if ( !String.IsNullOrEmpty(kriterijum) )
+            {
+                Rezultat = Broker.DajInstancu().VratiSveSlabeObjekteSaKriterijumom(new Racun(), String.Format(kriterijumRacuna, kriterijum), klijent.VratiPK());
+            } else
+            {
+                Rezultat = Broker.DajInstancu().VratiSveSlabeObjekte(new Racun(), klijent.VratiPK());
+            }
             return true;
+        }
+
+        protected override bool IzvrsiStavke(List<IDomenskiObjekat> lodo, string kriterijum, string sifraJakog)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -49,6 +49,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MojiKreditiForma";
             this.Text = "MojiKreditiForma";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MojiKreditiForma_FormClosed);
             this.Load += new System.EventHandler(this.MojiKreditiForma_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvMojiKrediti)).EndInit();
             this.ResumeLayout(false);

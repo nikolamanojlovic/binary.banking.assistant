@@ -19,9 +19,43 @@ namespace Domen
         #endregion
 
         #region Metode
-        public string VratiPK()
+        public string PostaviVrednostAtributa(string sifraJakog = "")
         {
-            return String.Format(" {0}, ", this.id);
+            return String.Format(Konstante.TabelaAdmin.TABELA_ADMIN_POSTAVI, this.jmbg, this.ime, this.prezime, this.mejl,
+                                                                             this.telefon, this.sifra, this.pozicija);
+        }
+
+        public string VratiKriterijumJakog(string sifraJakog = "")
+        {
+            return String.Empty;
+        }
+
+        public List<IDomenskiObjekat> VratiListu(ref MySqlDataReader citac)
+        {
+            List<IDomenskiObjekat> lista = new List<IDomenskiObjekat>();
+
+            while (citac.Read())
+            {
+                Admin admin = new Admin
+                {
+                    ID = Convert.ToInt64(citac["admin_id"]),
+                    JMBG = Convert.ToString(citac["jmbg"]),
+                    Ime = Convert.ToString(citac["ime"]),
+                    Prezime = Convert.ToString(citac["prezime"]),
+                    Mejl = Convert.ToString(citac["mejl"]),
+                    Telefon = Convert.ToString(citac["telefon"]),
+                    Sifra = Convert.ToString(citac["sifra"]),
+                    Pozicija = Convert.ToString(citac["pozicija"])
+                };
+                lista.Add(admin);
+            }
+
+            return lista;
+        }
+
+        public string VratiNazivPK()
+        {
+            return Konstante.TabelaAdmin.PK_ADMIN_ID;
         }
 
         public string VratiNazivTabele()
@@ -29,74 +63,30 @@ namespace Domen
             return Konstante.TabelaAdmin.NAZIV_TABELE;
         }
 
-        public string VratiVrednostiZaUbacivanje()
+        public string VratiPK()
         {
-            return String.Format(Konstante.TabelaAdmin.TABELA_ADMIN_UBACI, this.id, this.jmbg, this.ime, this.prezime, this.mejl,
-                   this.telefon, this.sifra, this.pozicija);
+            return Convert.ToString(this.id);
+        }
+
+        public string VratiPKIUslov(string sifraJakog = "")
+        {
+            return String.Format("{0} = '{1}'", Konstante.TabelaAdmin.PK_ADMIN_ID, Convert.ToString(this.id));
         }
 
         public string VratiUslovZaNadjiSlog()
         {
-            return Konstante.TabelaAdmin.POLJE_EMAIL + "='" + Mejl + "'";
+            return this.mejl;
         }
 
-        public string VratiAtributPretrazivanja()
+        public string VratiVrednostiZaJoin(String sifraJakog = "")
         {
-            return Konstante.TabelaAdmin.PK_ADMIN_ID;
+            return String.Empty;
         }
 
-        public string PostaviVrednostAtributa()
+        public string VratiVrednostiZaUbacivanje(string sifraJakog = "")
         {
-            return String.Format(Konstante.TabelaAdmin.TABELA_ADMIN_POSTAVI, this.id, this.jmbg, this.ime, this.prezime, this.mejl,
-                                 this.telefon, this.sifra, this.pozicija);
-        }
-
-        public void PostaviPocetniBroj(ref IDomenskiObjekat objekat)
-        {
-            (objekat as Admin).ID = 0;
-        }
-
-        public void PovecajBroj(MySqlDataReader citac, ref IDomenskiObjekat objekat)
-        {
-            (objekat as Admin).ID = Convert.ToInt64(citac[Konstante.TabelaAdmin.PK_ADMIN_ID]) + 1;
-        }
-
-        public bool Napuni(MySqlDataReader citac, ref IDomenskiObjekat objekat)
-        {
-            try
-            {
-                if (citac.Read())
-                {
-                    objekat = new Admin()
-                    {
-                        ID = Convert.ToInt64(citac["admin_id"] as String),
-                        JMBG = citac["jmbg"] as String,
-                        Ime = citac["ime"] as String,
-                        Prezime = citac["prezime"] as String,
-                        Mejl = citac["mejl"] as String,
-                        Telefon = citac["telefon"] as String,
-                        Sifra = citac["sifra"] as String,
-                        Pozicija = citac["pozicija"] as String
-                    };
-                    return true;
-                }
-                return false;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.StackTrace);
-                return false;
-            }
-        }
-
-        public bool ImaVezaniObjekat()
-        {
-            return false;
-        }
-
-        public string VratiUslovZaNadjiSlogove()
-        {
-            throw new NotImplementedException();
+            return String.Format(Konstante.TabelaAdmin.TABELA_ADMIN_UBACI, this.id, this.jmbg, this.ime, this.prezime, this.mejl,
+                                                                           this.telefon, this.sifra, this.pozicija);
         }
         #endregion
     }

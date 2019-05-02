@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 namespace Domen
 {
     [Serializable]
-    public class Klijent : Osoba, IDomenskiSlozeniObjekat, IDomenskiAgregiraniObjekat
+    public class Klijent : Osoba, IDomenskiObjekat
     {
         private String ulica;
         private int brojKuce;
@@ -40,9 +40,38 @@ namespace Domen
         #endregion
 
         #region Metode
-        public string VratiPK()
+        public string VratiKriterijumJakog(string sifraJakog = "")
         {
-            return String.Format(" {0}, ", Convert.ToString(this.id));
+            return String.Empty;
+        }
+
+        public List<IDomenskiObjekat> VratiListu(ref MySqlDataReader citac)
+        {
+            List<IDomenskiObjekat> lista = new List<IDomenskiObjekat>();
+
+            while (citac.Read())
+            {
+                Klijent klijent = new Klijent
+                {
+                    ID = Convert.ToInt64(citac["klijent_id"]),
+                    JMBG = Convert.ToString(citac["jmbg"]),
+                    Ime = Convert.ToString(citac["ime"]),
+                    Prezime = Convert.ToString(citac["prezime"]),
+                    Mejl = Convert.ToString(citac["mejl"]),
+                    Telefon = Convert.ToString(citac["telefon"]),
+                    Sifra = Convert.ToString(citac["sifra"]),
+                    Ulica = Convert.ToString(citac["ulica"]),
+                    BrojKuce = Convert.ToInt32(citac["broj_kuce"]),
+                    Grad = Convert.ToString(citac["grad"])
+                };
+                lista.Add(klijent);
+            }
+            return lista;
+        }
+
+        public string VratiNazivPK()
+        {
+            return Konstante.TabelaKlijent.PK_KLIJENT_ID;
         }
 
         public string VratiNazivTabele()
@@ -50,148 +79,37 @@ namespace Domen
             return Konstante.TabelaKlijent.NAZIV_TABELE;
         }
 
-        public string VratiVrednostiZaUbacivanje()
+        public string VratiPK()
         {
-            return String.Format(Konstante.TabelaKlijent.TABELA_KLIJENT_UBACI, this.id, this.jmbg, this.ime, this.prezime, this.mejl,
-                                 this.telefon, this.sifra, this.ulica, this.brojKuce, this.grad);
+            return Convert.ToString(this.id);
+        }
+
+        public string VratiPKIUslov(string sifraJakog = "")
+        {
+            return String.Format("{0} = '{1}'", Konstante.TabelaKlijent.PK_KLIJENT_ID, Convert.ToString(this.id));
         }
 
         public string VratiUslovZaNadjiSlog()
         {
-            return Konstante.TabelaKlijent.PK_KLIJENT_MEJL + "='" + Mejl + "'";
+            return this.JMBG;
         }
 
-        public string VratiAtributPretrazivanja()
+        public string VratiVrednostiZaJoin(String sifraJakog = "")
         {
-            return Konstante.TabelaKlijent.PK_KLIJENT_ID + "='" + ID + "'";
+            return String.Empty;
         }
 
-        public string PostaviVrednostAtributa()
+        public string PostaviVrednostAtributa(string sifraJakog = "")
         {
-            return String.Format(Konstante.TabelaKlijent.TABELA_KLIJENT_POSTAVI, this.id, this.jmbg, this.ime, this.prezime, this.mejl,
+            return String.Format(Konstante.TabelaKlijent.TABELA_KLIJENT_POSTAVI, this.ime, this.prezime, this.mejl, this.telefon,
+                                                                                 this.sifra, this.ulica, this.brojKuce, this.grad);
+        }
+
+        public string VratiVrednostiZaUbacivanje(string sifraJakog = "")
+        {
+            return String.Format(Konstante.TabelaKlijent.TABELA_KLIJENT_UBACI, this.id, this.jmbg, this.ime, this.prezime, this.mejl,
                                  this.telefon, this.sifra, this.ulica, this.brojKuce, this.grad);
         }
-
-        public void PostaviPocetniBroj(ref IDomenskiObjekat objekat)
-        {
-            (objekat as Klijent).ID = 0;
-        }
-
-        public void PovecajBroj(MySqlDataReader citac, ref IDomenskiObjekat objekat)
-        {
-            (objekat as Klijent).ID = Convert.ToInt64(citac[Konstante.TabelaKlijent.PK_KLIJENT_ID]) + 1;
-        }
-
-        public bool Napuni(MySqlDataReader citac, ref IDomenskiObjekat objekat)
-        {
-            try
-            {
-                objekat = new Klijent()
-                {
-                    ID = Convert.ToInt64(citac["klijent_id"] as String),
-                    JMBG = citac["jmbg"] as String,
-                    Ime = citac["ime"] as String,
-                    Prezime = citac["prezime"] as String,
-                    Mejl = citac["mejl"] as String,
-                    Telefon = citac["telefon"] as String,
-                    Sifra = citac["sifra"] as String,
-                    Ulica = citac["ulica"] as String,
-                    BrojKuce = Convert.ToInt32(citac["brojKuce"] as String),
-                    Grad = citac["grad"] as String
-                };
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.StackTrace);
-                return false;
-            }
-        }
-
-        public bool ImaVezaniObjekat()
-        {
-            return true;
-        }
-
-        #region Metode vezane za slab objekat
-        public string VratiUslovZaNadjiSlogove()
-        {
-            return Konstante.TabelaKlijent.PK_KLIJENT_ID + "='" + ID + "'";
-        }
-        
-        public IDomenskiObjekat VratiVezaniObjekat()
-        {
-            return new Racun();
-        }
-
-        public List<IDomenskiObjekat> VratiVezaneObjekte()
-        {
-            if ( Racuni == null )
-            {
-                return null;
-            }
-            else
-            {
-                return new List<IDomenskiObjekat>(Racuni);
-            }
-        }
-
-        public bool NapuniVezaneObjekte(MySqlDataReader citac, ref IDomenskiObjekat objekat)
-        {
-            try
-            {
-               if (citac.HasRows)
-                {
-                    while(citac.Read())
-                    {
-                        if ( (objekat as Klijent).Racuni == null )
-                        {
-                            (objekat as Klijent).Racuni = new List<Racun>();
-                        }
-
-                        (objekat as Klijent).Racuni.Add(new Racun()
-                        {
-                            ID = Convert.ToInt64(citac["racun_id"] as String),
-                            BrojRacuna = citac["broj_racuna"] as String,
-                            Tip = (TipRacuna)Enum.Parse(typeof(TipRacuna), citac["tip_racuna"] as String, true),
-                            DatumKreiranja = DateTime.Parse(Convert.ToString(citac["datum_kreiranja"]))
-                        });
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.StackTrace);
-                return false;
-            }
-            return true;
-        }
-        #endregion
-
-        public IDomenskiObjekat VratiAgregiraniObjekat()
-        {
-            return new AktiviraniKredit();
-        }
-
-        #region Neimplementirane
-        public string VratiVrednostiZaJoin()
-        {
-            return String.Join(" ", new String[]
-            {
-                String.Format(Konstante.SQL.JOIN, new String[]
-            {
-                Konstante.TabelaKlijent.NAZIV_TABELE,
-                " klijent.klijent_id = aktivni_kredit.klijent_id "
-            }),
-                String.Format(Konstante.SQL.JOIN, new String[]
-            {
-                Konstante.TabelaTipKredita.NAZIV_TABELE,
-                " tip_kredita.tip_kredita_id = aktivni_kredit.tip_kredita_id "
-            }),
-
-        });
-        }
-        #endregion
         #endregion
 
         public override string ToString()

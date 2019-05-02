@@ -51,6 +51,7 @@
             this.txtPretraga.Size = new System.Drawing.Size(278, 20);
             this.txtPretraga.TabIndex = 1;
             this.txtPretraga.TextChanged += new System.EventHandler(this.txtPretraga_TextChanged);
+            this.txtPretraga.Leave += new System.EventHandler(this.txtPretraga_Leave);
             // 
             // dgvMojiRacuni
             // 

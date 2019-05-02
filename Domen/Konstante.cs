@@ -5,15 +5,17 @@
         public static class Opste
         {
             public static readonly string ZAREZ = ", ";
+            public static readonly string TACKA = ".";
             public static readonly string CRNA_TACKA = "\u2022";
+            public static readonly string NULA = "0";
         }
 
         public static class SQL
         {
-            public static readonly string FORMAT_DATUMA = "MM/dd/yyyy HH:mm:ss";
+            public static readonly string FORMAT_DATUMA = "yyyy-MM-dd HH:mm:ss";
             public static readonly string INSERT_INTO = " INSERT INTO ";
-            public static readonly string VALUES = " ( {0} ) ";
-            public static readonly string DELETE_FROM = " DELETE {0} FROM ";
+            public static readonly string VALUES = " VALUES ( {0} ) ";
+            public static readonly string DELETE_FROM = " DELETE FROM {0} ";
             public static readonly string ALL = "*";
             public static readonly string WHERE = " WHERE {0} ";
             public static readonly string UPDATE = " UPDATE ";
@@ -22,6 +24,9 @@
             public static readonly string MAX = " MAX({0}) AS max ";
             public static readonly string AND = " AND ";
             public static readonly string JOIN = " JOIN {0} ON {1}";
+            public static readonly string OR = " {0} OR {1} ";
+            public static readonly string OR_BEZ_UBACIVANJA = " OR ";
+            public static readonly string AS = " AS ";
         }
 
         public static class DB
@@ -54,19 +59,22 @@
         public static class TabelaRacun
         {
             public static readonly string NAZIV_TABELE = "racun";
+            public static readonly string PRIMALAC = "primalac_klijent_id";
+            public static readonly string POSILJALAC = "posiljalac_klijent_id";
             public static readonly string PK_RACUN_ID = "racun_id";
             public static readonly string POLJE_BROJ = "broj_racuna";
-            public static readonly string TABELA_RACUN_UBACI = " '{0}', '{1}', '{2}', '{3}' ";
-            public static readonly string TABELA_RACUN_POSTAVI = " racun_id='{0}', broj_racuna='{1}', tip='{2}', datum_kreiranja'{3}' ";
+            public static readonly string TABELA_RACUN_UBACI = " '{0}', '{1}', '{2}', '{3}', '{4}' ";
+            public static readonly string TABELA_RACUN_POSTAVI = " broj_racuna='{0}', tip='{1}', datum_kreiranja='{2}' ";
         }
 
         public static class TabelaKlijent
         {
             public static readonly string NAZIV_TABELE = "klijent";
             public static readonly string PK_KLIJENT_ID = "klijent_id";
-            public static readonly string PK_KLIJENT_MEJL = "mejl";
+            public static readonly string POLJE_MEJL = "mejl";
+            public static readonly string POLJE_SIFRA = "sifra";
             public static readonly string TABELA_KLIJENT_UBACI = " '{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}'";
-            public static readonly string TABELA_KLIJENT_POSTAVI = " klijent_id='{0}', jmbg='{1}', ime='{2}', prezime='{3}', mejl='{4}', telefon='{5}', sifra='{6}', ulica='{7}', broj_kuce='{8}', grad='{9}' ";
+            public static readonly string TABELA_KLIJENT_POSTAVI = " ime='{0}', prezime='{1}', mejl='{2}', telefon='{3}', sifra='{4}', ulica='{5}', broj_kuce='{6}', grad='{7}' ";
         }
 
         public static class TabelaAdmin
@@ -76,7 +84,7 @@
             public static readonly string POLJE_SIFRA = "sifra";
             public static readonly string POLJE_EMAIL = "mejl";
             public static readonly string TABELA_ADMIN_UBACI = " '{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}' ";
-            public static readonly string TABELA_ADMIN_POSTAVI = " admin_id='{0}', jmbg='{1}', ime='{2}', prezime='{3}', mejl='{4}', telefon='{5}', sifra='{6}', pozicija='{7}' ";
+            public static readonly string TABELA_ADMIN_POSTAVI = " jmbg='{0}', ime='{1}', prezime='{2}', mejl='{3}', telefon='{4}', sifra='{5}', pozicija='{6}' ";
         }
 
         public static class TabelaTipKredita
@@ -85,34 +93,36 @@
             public static readonly string PK_TIP_KREDITA_ID = "tip_kredita_id";
             public static readonly string POLJE_NAZIV = "naziv";
             public static readonly string TABELA_TIP_KREDITA_UBACI = " '{0}', '{1}', '{2}', '{3}', '{4}' ";
-            public static readonly string TABELA_TIP_KREDITA_POSTAVI = " tip_kredita_id='{0}', naziv='{1}', min_dug='{2}', maks_dug='{3}', vremenski_okvir='{4}' ";
+            public static readonly string TABELA_TIP_KREDITA_POSTAVI = " naziv='{0}', min_dug='{1}', maks_dug='{2}', vremenski_okvir='{3}' ";
         }
 
         public static class TabelaRata
         {
             public static readonly string NAZIV_TABELE = "rata";
-            public static readonly string PK_RATA_ID = "klijent_id, tip_kredita_id, datum_uzimanja, datum_isplate, redni_broj";
+            public static readonly string PK_RATA_ID = " redni_broj ";
             public static readonly string POLJE_BROJ = "redni_broj";
-            public static readonly string TABELA_RATA_UBACI = " '{0}', '{1}', '{2}', '{3}', '{4}' ";
-            public static readonly string TABELA_RATA_POSTAVI = " redni_broj='{0}', rok_dospeca='{1}', vremenska_oznaka='{2}', posiljalac='{3}', primalac='{4}' ";
+            public static readonly string TABELA_RATA_UBACI = " '{0}', '{1}', '{2}', '{3} ";
+            public static readonly string TABELA_RATA_POSTAVI = "  datum_naplate='{0}', {1} ";
         }
 
         public static class TabelaTransakcija
         {
-            public static readonly string NAZIV_TABELE = "transakcija";
-            public static readonly string PK_TRANSAKCIJA_ID = "vremenska_oznaka, posiljalac_klijent_id, posiljalac_racun_id, primalac_klijent_id, primalac_racun_id";
+            public static readonly string NAZIV_TABELE = " transakcija ";
+            public static readonly string PK_TRANSAKCIJA_ID = " vremenska_oznaka ";
             public static readonly string POLJE_POSILJALAC = "posiljalac_klijent_id";
             public static readonly string POLJE_PRIMALAC = "primalac_klijent_id";
-            public static readonly string TABELA_TRASAKCIJA_UBACI = " '{0}', '{1}', '{2}', '{3}', '{4}', '{5}' ";
-            public static readonly string TABELA_TRASAKCIJA_POSTAVI = " vremenskaOznaka='{0}', iznos='{1}' ";
+            public static readonly string POLJE_POSILJALAC_RACUN = "posiljalac_racun_id";
+            public static readonly string POLJE_PRIMALAC_RACUN = "primalac_racun_id";
+            public static readonly string TABELA_TRASAKCIJA_UBACI = " '{0}', {1}, '{2}' ";
+            public static readonly string TABELA_TRASAKCIJA_POSTAVI = " iznos='{1}' ";
         }
 
         public static class TabelaAktiviraniKredit
         {
             public static readonly string NAZIV_TABELE = "aktivni_kredit";
-            public static readonly string PK_AK_ID = "broj_kredita";
-            public static readonly string TABELA_AK_UBACI = " '{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}' ";
-            public static readonly string TABELA_KLIJENT_POSTAVI = " klijent_id='{0}', tip_kredita_id='{1}', broj_kredita='{2}', datum_uzimanja='{3}', rok_dospeca='{4}', datum_isplate='{5}', kamata='{6}', broj_rata='{7}'";
+            public static readonly string PK_AK_ID = " broj_kredita ";
+            public static readonly string TABELA_AK_UBACI = " '{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}' ";
+            public static readonly string TABELA_KLIJENT_POSTAVI = " datum_uzimanja='{0}', rok_dospeca='{1}', datum_isplate='{2}', kamata='{3}', broj_rata='{4}'";
         }
     }
 }

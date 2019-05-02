@@ -36,11 +36,10 @@
             this.txtImePrezimeAdmina = new System.Windows.Forms.TextBox();
             this.gbMeni = new System.Windows.Forms.GroupBox();
             this.btnOtvoriRacun = new System.Windows.Forms.Button();
-            this.txtPrikaziKorisnika = new System.Windows.Forms.Button();
             this.btnIzmeniInformacije = new System.Windows.Forms.Button();
             this.btnNapraviTransakciju = new System.Windows.Forms.Button();
             this.btnOdobriKredit = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.bttnObrisiKorisnika = new System.Windows.Forms.Button();
             this.btnKreirajKorisnika = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.PictureLogo)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -55,7 +54,7 @@
             this.PictureLogo.Image = ((System.Drawing.Image)(resources.GetObject("PictureLogo.Image")));
             this.PictureLogo.Location = new System.Drawing.Point(12, 337);
             this.PictureLogo.Name = "PictureLogo";
-            this.PictureLogo.Size = new System.Drawing.Size(155, 116);
+            this.PictureLogo.Size = new System.Drawing.Size(155, 107);
             this.PictureLogo.TabIndex = 1;
             this.PictureLogo.TabStop = false;
             // 
@@ -66,7 +65,7 @@
             this.groupBox1.Controls.Add(this.txtImePrezimeAdmina);
             this.groupBox1.Location = new System.Drawing.Point(173, 337);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(200, 120);
+            this.groupBox1.Size = new System.Drawing.Size(200, 107);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Ulogovani";
@@ -75,7 +74,7 @@
             // 
             this.txtPozicijaAdmina.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtPozicijaAdmina.Enabled = false;
-            this.txtPozicijaAdmina.Location = new System.Drawing.Point(20, 84);
+            this.txtPozicijaAdmina.Location = new System.Drawing.Point(20, 79);
             this.txtPozicijaAdmina.Name = "txtPozicijaAdmina";
             this.txtPozicijaAdmina.Size = new System.Drawing.Size(159, 13);
             this.txtPozicijaAdmina.TabIndex = 2;
@@ -84,7 +83,7 @@
             // 
             this.txtMejlAdmina.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtMejlAdmina.Enabled = false;
-            this.txtMejlAdmina.Location = new System.Drawing.Point(20, 59);
+            this.txtMejlAdmina.Location = new System.Drawing.Point(20, 54);
             this.txtMejlAdmina.Name = "txtMejlAdmina";
             this.txtMejlAdmina.Size = new System.Drawing.Size(159, 13);
             this.txtMejlAdmina.TabIndex = 1;
@@ -93,7 +92,7 @@
             // 
             this.txtImePrezimeAdmina.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtImePrezimeAdmina.Enabled = false;
-            this.txtImePrezimeAdmina.Location = new System.Drawing.Point(20, 33);
+            this.txtImePrezimeAdmina.Location = new System.Drawing.Point(20, 28);
             this.txtImePrezimeAdmina.Name = "txtImePrezimeAdmina";
             this.txtImePrezimeAdmina.Size = new System.Drawing.Size(159, 13);
             this.txtImePrezimeAdmina.TabIndex = 0;
@@ -101,15 +100,14 @@
             // gbMeni
             // 
             this.gbMeni.Controls.Add(this.btnOtvoriRacun);
-            this.gbMeni.Controls.Add(this.txtPrikaziKorisnika);
             this.gbMeni.Controls.Add(this.btnIzmeniInformacije);
             this.gbMeni.Controls.Add(this.btnNapraviTransakciju);
             this.gbMeni.Controls.Add(this.btnOdobriKredit);
-            this.gbMeni.Controls.Add(this.button1);
+            this.gbMeni.Controls.Add(this.bttnObrisiKorisnika);
             this.gbMeni.Controls.Add(this.btnKreirajKorisnika);
             this.gbMeni.Location = new System.Drawing.Point(12, 12);
             this.gbMeni.Name = "gbMeni";
-            this.gbMeni.Size = new System.Drawing.Size(361, 319);
+            this.gbMeni.Size = new System.Drawing.Size(664, 319);
             this.gbMeni.TabIndex = 3;
             this.gbMeni.TabStop = false;
             this.gbMeni.Text = "Meni";
@@ -120,25 +118,13 @@
             this.btnOtvoriRacun.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnOtvoriRacun.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOtvoriRacun.ForeColor = System.Drawing.Color.Black;
-            this.btnOtvoriRacun.Location = new System.Drawing.Point(128, 117);
+            this.btnOtvoriRacun.Location = new System.Drawing.Point(334, 20);
             this.btnOtvoriRacun.Name = "btnOtvoriRacun";
             this.btnOtvoriRacun.Size = new System.Drawing.Size(103, 91);
             this.btnOtvoriRacun.TabIndex = 6;
             this.btnOtvoriRacun.Text = "Otvori račun";
             this.btnOtvoriRacun.UseVisualStyleBackColor = false;
-            // 
-            // txtPrikaziKorisnika
-            // 
-            this.txtPrikaziKorisnika.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(163)))), ((int)(((byte)(73)))));
-            this.txtPrikaziKorisnika.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.txtPrikaziKorisnika.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.txtPrikaziKorisnika.ForeColor = System.Drawing.Color.Black;
-            this.txtPrikaziKorisnika.Location = new System.Drawing.Point(237, 20);
-            this.txtPrikaziKorisnika.Name = "txtPrikaziKorisnika";
-            this.txtPrikaziKorisnika.Size = new System.Drawing.Size(103, 91);
-            this.txtPrikaziKorisnika.TabIndex = 5;
-            this.txtPrikaziKorisnika.Text = "Prikaži korisnika";
-            this.txtPrikaziKorisnika.UseVisualStyleBackColor = false;
+            this.btnOtvoriRacun.Click += new System.EventHandler(this.btnOtvoriRacun_Click);
             // 
             // btnIzmeniInformacije
             // 
@@ -146,12 +132,13 @@
             this.btnIzmeniInformacije.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnIzmeniInformacije.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnIzmeniInformacije.ForeColor = System.Drawing.Color.Black;
-            this.btnIzmeniInformacije.Location = new System.Drawing.Point(237, 117);
+            this.btnIzmeniInformacije.Location = new System.Drawing.Point(225, 20);
             this.btnIzmeniInformacije.Name = "btnIzmeniInformacije";
             this.btnIzmeniInformacije.Size = new System.Drawing.Size(103, 91);
             this.btnIzmeniInformacije.TabIndex = 4;
             this.btnIzmeniInformacije.Text = "Izmeni informacije o korisniku";
             this.btnIzmeniInformacije.UseVisualStyleBackColor = false;
+            this.btnIzmeniInformacije.Click += new System.EventHandler(this.btnIzmeniInformacije_Click);
             // 
             // btnNapraviTransakciju
             // 
@@ -159,12 +146,13 @@
             this.btnNapraviTransakciju.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnNapraviTransakciju.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNapraviTransakciju.ForeColor = System.Drawing.Color.Black;
-            this.btnNapraviTransakciju.Location = new System.Drawing.Point(19, 214);
+            this.btnNapraviTransakciju.Location = new System.Drawing.Point(552, 20);
             this.btnNapraviTransakciju.Name = "btnNapraviTransakciju";
             this.btnNapraviTransakciju.Size = new System.Drawing.Size(103, 91);
             this.btnNapraviTransakciju.TabIndex = 3;
             this.btnNapraviTransakciju.Text = "Napravi transakciju";
             this.btnNapraviTransakciju.UseVisualStyleBackColor = false;
+            this.btnNapraviTransakciju.Click += new System.EventHandler(this.btnNapraviTransakciju_Click);
             // 
             // btnOdobriKredit
             // 
@@ -172,25 +160,27 @@
             this.btnOdobriKredit.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnOdobriKredit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOdobriKredit.ForeColor = System.Drawing.Color.Black;
-            this.btnOdobriKredit.Location = new System.Drawing.Point(19, 117);
+            this.btnOdobriKredit.Location = new System.Drawing.Point(443, 20);
             this.btnOdobriKredit.Name = "btnOdobriKredit";
             this.btnOdobriKredit.Size = new System.Drawing.Size(103, 91);
             this.btnOdobriKredit.TabIndex = 2;
             this.btnOdobriKredit.Text = "Odobri kredit";
             this.btnOdobriKredit.UseVisualStyleBackColor = false;
+            this.btnOdobriKredit.Click += new System.EventHandler(this.btnOdobriKredit_Click);
             // 
-            // button1
+            // bttnObrisiKorisnika
             // 
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(163)))), ((int)(((byte)(73)))));
-            this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.ForeColor = System.Drawing.Color.Black;
-            this.button1.Location = new System.Drawing.Point(128, 20);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(103, 91);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Obriši korisnika";
-            this.button1.UseVisualStyleBackColor = false;
+            this.bttnObrisiKorisnika.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(163)))), ((int)(((byte)(73)))));
+            this.bttnObrisiKorisnika.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.bttnObrisiKorisnika.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bttnObrisiKorisnika.ForeColor = System.Drawing.Color.Black;
+            this.bttnObrisiKorisnika.Location = new System.Drawing.Point(116, 20);
+            this.bttnObrisiKorisnika.Name = "bttnObrisiKorisnika";
+            this.bttnObrisiKorisnika.Size = new System.Drawing.Size(103, 91);
+            this.bttnObrisiKorisnika.TabIndex = 1;
+            this.bttnObrisiKorisnika.Text = "Obriši korisnika";
+            this.bttnObrisiKorisnika.UseVisualStyleBackColor = false;
+            this.bttnObrisiKorisnika.Click += new System.EventHandler(this.button1_Click);
             // 
             // btnKreirajKorisnika
             // 
@@ -198,21 +188,23 @@
             this.btnKreirajKorisnika.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnKreirajKorisnika.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnKreirajKorisnika.ForeColor = System.Drawing.Color.Black;
-            this.btnKreirajKorisnika.Location = new System.Drawing.Point(19, 20);
+            this.btnKreirajKorisnika.Location = new System.Drawing.Point(7, 20);
             this.btnKreirajKorisnika.Name = "btnKreirajKorisnika";
             this.btnKreirajKorisnika.Size = new System.Drawing.Size(103, 91);
             this.btnKreirajKorisnika.TabIndex = 0;
             this.btnKreirajKorisnika.Text = "Kreiraj korisnika";
             this.btnKreirajKorisnika.UseVisualStyleBackColor = false;
+            this.btnKreirajKorisnika.Click += new System.EventHandler(this.btnKreirajKorisnika_Click);
             // 
             // GlavnaFormaAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(393, 465);
+            this.ClientSize = new System.Drawing.Size(688, 456);
             this.Controls.Add(this.gbMeni);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.PictureLogo);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "GlavnaFormaAdmin";
             this.Text = "GlavnaFormaAdmin";
             this.Load += new System.EventHandler(this.GlavnaFormaAdmin_Load);
@@ -236,8 +228,7 @@
         private System.Windows.Forms.Button btnIzmeniInformacije;
         private System.Windows.Forms.Button btnNapraviTransakciju;
         private System.Windows.Forms.Button btnOdobriKredit;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button bttnObrisiKorisnika;
         private System.Windows.Forms.Button btnOtvoriRacun;
-        private System.Windows.Forms.Button txtPrikaziKorisnika;
     }
 }

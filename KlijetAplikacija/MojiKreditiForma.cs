@@ -10,8 +10,6 @@ namespace KlijetAplikacija
 {
     public partial class MojiKreditiForma : Form
     {
-        public const String KREDITI_NE_POSTOJE_KRIJERIJUM = "Krediti za kriterijum <{0}> ne postoje!";
-
         private List<DGVKredit> kreditiKlijenta;
         private GlavnaFormaKlijent glavnaFormaKlijent;
         private KontrolerKrediti kontrolerKrediti;
@@ -39,7 +37,7 @@ namespace KlijetAplikacija
                     TipKredita = kredit.TipKredita.ToString(),
                     BrojRata = kredit.BrojRata,
                     Kamata = kredit.Kamata,
-                    DatumIsplate = DateTime.MaxValue.Equals(kredit.DatumIsplate) ? "NEPOZNATO" : kredit.DatumIsplate.ToShortDateString(),
+                    DatumIsplate = DateTime.MinValue.Equals(kredit.DatumIsplate) ? "NEPOZNATO" : kredit.DatumIsplate.ToShortDateString(),
                     DatumUzimanja = kredit.DatumUzimanja.ToShortDateString(),
                     RokDospeca = kredit.RokDospeca.ToShortDateString()
                 });
@@ -68,6 +66,11 @@ namespace KlijetAplikacija
         private void MojiKreditiForma_Load(object sender, EventArgs e)
         {
             kontrolerKrediti.PrikaziSveRacune(this);
+        }
+
+        private void MojiKreditiForma_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            glavnaFormaKlijent.Show();
         }
     }
 }

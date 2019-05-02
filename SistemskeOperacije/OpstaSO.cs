@@ -1,6 +1,7 @@
 ﻿using Domen;
 using Sesija;
 using System;
+using System.Collections.Generic;
 
 namespace SistemskeOperacije
 {
@@ -16,16 +17,16 @@ namespace SistemskeOperacije
         }
         #endregion
 
-        public bool IzvrsiSO(IDomenskiObjekat objekat)
+        public bool IzvrsiSO(IDomenskiObjekat objekat, String kriterijum = "", String sifraJakog = "")
         {
-            bool izvrseno = false;
+            bool rezultat;
             try
             {
                 Broker.DajInstancu().OtvoriKonekciju();
                 Broker.DajInstancu().ZapocniTransakciju();
-                izvrseno = Izvrsi(objekat);
+                rezultat = Izvrsi(objekat, kriterijum, sifraJakog);
                 Broker.DajInstancu().ZatvoriCitac();
-                if (izvrseno)
+                if (rezultat)
                 {
                     Broker.DajInstancu().PotvrdiTransakciju();
                 }
@@ -33,11 +34,10 @@ namespace SistemskeOperacije
                 {
                     Broker.DajInstancu().PonistiTransakciju();
                 }
-                return izvrseno;
+                return rezultat;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
                 return false;
             }
             finally
@@ -46,6 +46,36 @@ namespace SistemskeOperacije
             }
         }
 
-        protected abstract bool Izvrsi(IDomenskiObjekat objekat);
+        public bool IzvrsiStavkeSO(List<IDomenskiObjekat> stavke, String kriterijum = "", String sifraJakog = "")
+        {
+            bool rezultat;
+            try
+            {
+                Broker.DajInstancu().OtvoriKonekciju();
+                Broker.DajInstancu().ZapocniTransakciju();
+                rezultat = IzvrsiStavke(stavke, kriterijum, sifraJakog);
+                Broker.DajInstancu().ZatvoriCitac();
+                if (rezultat)
+                {
+                    Broker.DajInstancu().PotvrdiTransakciju();
+                }
+                else
+                {
+                    Broker.DajInstancu().PonistiTransakciju();
+                }
+                return rezultat;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            finally
+            {
+                Broker.DajInstancu().ZatvoriKonekciju();
+            }
+        }
+
+        protected abstract bool Izvrsi(IDomenskiObjekat objekat, String kriterijum = "", String sifraJakog = "");
+        protected abstract bool IzvrsiStavke(List<IDomenskiObjekat> lodo, String kriterijum = "", String sifraJakog = "");
     }
 }

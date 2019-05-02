@@ -1,4 +1,5 @@
 ﻿using Domen;
+using KlijetAplikacija.Kontroleri;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,6 +16,8 @@ namespace KlijetAplikacija
     {
         private const string INFO_TEKST = "Projekat iz predmeta Projektovanje Softvera (FON, 2019)";
 
+        private KontrolerGlavneForme kontrolerGlavneForme;
+
         public GlavnaFormaKlijent()
         {
             InitializeComponent();
@@ -25,6 +28,8 @@ namespace KlijetAplikacija
             this.pbKrediti.BackColor = Color.Transparent;
             this.pbTransakcije.SizeMode = PictureBoxSizeMode.Zoom;
             this.pbTransakcije.BackColor = Color.Transparent;
+
+            this.kontrolerGlavneForme = new KontrolerGlavneForme();
         }
 
         private void lblRazvijeno_Click(object sender, EventArgs e)
@@ -39,7 +44,10 @@ namespace KlijetAplikacija
             (new MojiRacuniForma(this)
             {
                 FormBorderStyle = FormBorderStyle.FixedSingle,
-                StartPosition = FormStartPosition.CenterScreen
+                StartPosition = FormStartPosition.CenterScreen,
+                Text = String.Format(Konstante.GUI.DOBRODOSLI, new String[] {
+                                     Komunikacija.DajKomunikaciju().VratiSesiju().Ime,
+                                     Komunikacija.DajKomunikaciju().VratiSesiju().Prezime })
             }).Show();
         }
 
@@ -49,12 +57,30 @@ namespace KlijetAplikacija
             (new MojiKreditiForma(this)
             {
                 FormBorderStyle = FormBorderStyle.FixedSingle,
-                StartPosition = FormStartPosition.CenterScreen
+                StartPosition = FormStartPosition.CenterScreen,
+                Text = String.Format(Konstante.GUI.DOBRODOSLI, new String[] {
+                                     Komunikacija.DajKomunikaciju().VratiSesiju().Ime,
+                                     Komunikacija.DajKomunikaciju().VratiSesiju().Prezime })
+
+            }).Show();
+        }
+
+        private void pbTransakcije_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            (new MojeTransakcijeForma(this)
+            {
+                FormBorderStyle = FormBorderStyle.FixedSingle,
+                StartPosition = FormStartPosition.CenterScreen,
+                Text = String.Format(Konstante.GUI.DOBRODOSLI, new String[] {
+                                     Komunikacija.DajKomunikaciju().VratiSesiju().Ime,
+                                     Komunikacija.DajKomunikaciju().VratiSesiju().Prezime })
             }).Show();
         }
 
         private void GlavnaFormaKlijent_FormClosed(object sender, FormClosedEventArgs e)
         {
+            kontrolerGlavneForme.Odjava();
             Application.Exit();
         }
     }

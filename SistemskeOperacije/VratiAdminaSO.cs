@@ -10,10 +10,16 @@ namespace SistemskeOperacije
 {
     public class VratiAdminaSO : OpstaSO
     {
-        protected override bool Izvrsi(IDomenskiObjekat objekat)
+        protected override bool Izvrsi(IDomenskiObjekat objekat, string kriterijum, string sifraJakog)
         {
-            Rezultat = Broker.DajInstancu().NadjiSlogIVratiGa(objekat);
+            List<IDomenskiObjekat> admin = Broker.DajInstancu().VratiPoKriterijumu(objekat, kriterijum);
+            Rezultat = admin.FirstOrDefault();
             return true;
+        }
+
+        protected override bool IzvrsiStavke(List<IDomenskiObjekat> lodo, string kriterijum, string sifraJakog)
+        {
+            throw new NotImplementedException();
         }
     }
 }

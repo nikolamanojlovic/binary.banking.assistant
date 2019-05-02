@@ -19,7 +19,6 @@ namespace KlijetAplikacija.Kontroleri
                 KlijentTransferObjekat zahtev = new KlijentTransferObjekat()
                 {
                     Operacija = Operacija.KLIJENT_PRIKAZI_RACUNE,
-                    Poruka = Komunikacija.DajKomunikaciju().VratiSesiju()
                 };
 
                 Komunikacija.DajKomunikaciju().PosaljiZahtev(zahtev);
@@ -31,15 +30,41 @@ namespace KlijetAplikacija.Kontroleri
                 }
                 else
                 {
-                    List<Racun> racuni = new List<Racun>();
-                    ((List<IDomenskiObjekat>) odgovor.Objekat).ForEach(racun => racuni.Add((Racun)racun));
-                    mojiRacuniForma.PostaviSveRacune(racuni);
+                    mojiRacuniForma.PostaviSveRacune( ((List<IDomenskiObjekat>) odgovor.Objekat).ConvertAll(x => (Racun) x) );
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.StackTrace);
                 mojiRacuniForma.PrikaziGreskaPoruku(Konstante.Server.SERVER_NIJE_DOSTUPAN);
+            }
+        }
+
+        public List<Racun> PrikaziRacuneSaKriterijumom(MojiRacuniForma mojiRacuniForma, string text)
+        {
+            try
+            {
+                KlijentTransferObjekat zahtev = new KlijentTransferObjekat()
+                {
+                    Operacija = Operacija.KLIJENT_PRIKAZI_RACUNE_KRITERIJUM,
+                    Poruka = text
+                };
+
+                Komunikacija.DajKomunikaciju().PosaljiZahtev(zahtev);
+                ServerTransferObjekat odgovor = Komunikacija.DajKomunikaciju().ProcitajOdgovor();
+
+                if (odgovor.Rezultat == 0)
+                {
+                    return null;
+                }
+                else
+                {
+                    return ((List<IDomenskiObjekat>)odgovor.Objekat).ConvertAll(x => (Racun)x);
+                }
+            }
+            catch (Exception ex)
+            {
+                mojiRacuniForma.PrikaziGreskaPoruku(Konstante.Server.SERVER_NIJE_DOSTUPAN);
+                return null;
             }
         }
     }

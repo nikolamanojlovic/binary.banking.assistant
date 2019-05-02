@@ -7,27 +7,37 @@ namespace Domen
 {
     public interface IDomenskiObjekat
     {
-        // Vraca naziv primarnog kljuca objekta
+        // Vraca vrednost primarnog kljuca objekta
         String VratiPK();
+        // Vraca vrednost za MAX
+        String VratiNazivPK();
+        String VratiPKIUslov(String sifraJakog = "");
         // Vraca naziv tabele koja predstavlja objekat u bazi
         String VratiNazivTabele();
         // Vraca vrednosti za INSERT
-        String VratiVrednostiZaUbacivanje();
+        String VratiVrednostiZaUbacivanje(String sifraJakog = "");
         // Vraca vredost za WHERE
         String VratiUslovZaNadjiSlog();
-        // Vraca vrednost za MAX
-        String VratiAtributPretrazivanja();
         // Vraca vrednost za SET
-        String PostaviVrednostAtributa();
-        // Vraca vredost za WHERE slabog objekta
-        String VratiUslovZaNadjiSlogove();
-        // Postavlja vrednost primarnog kljuca na 0
-        void PostaviPocetniBroj(ref IDomenskiObjekat objekat);
-        // Povecava vrednost primarnog kljuca za 1
-        void PovecajBroj(MySqlDataReader citac, ref IDomenskiObjekat objekat);
-        // Pretvara rezultat upita u odgovarajuci objekat
-        bool Napuni(MySqlDataReader citac, ref IDomenskiObjekat objekat);
-        // Proverava da li objekat sadrzi slabi objekat
-        bool ImaVezaniObjekat();
+        String PostaviVrednostAtributa(String sifraJakog = "");
+        // Vraca vredost za WHERE za slabog objekta
+        String VratiKriterijumJakog(String sifraJakog = "");
+        // Vraca vrednost za JOIN 
+        String VratiVrednostiZaJoin(String sifraJakog = "");
+        // Vraca popunjen slab objekat
+        List<IDomenskiObjekat> VratiListu(ref MySqlDataReader citac);
     }
+
+
+         //   string VratiImeTabele();
+        //string VratiKljucIUslov();
+        //string VratiVrednostiZaInsert(int sifraJakog = 0);
+        //string VratiKoloneZaInsert();
+        //string VratiKljuc();
+       // int VratiVrednostKljuca();
+      //  string KriterujumPretrage();
+      //  string KriterijumJakog(int sifraJakog = 0);
+      //  string VratiVrednostiZaUpdate(int sifraJakog = 0);
+      //  string VratiKljucZaJoin(IOpstiDomenskiObjekat odo);
+      //  List<IOpstiDomenskiObjekat> VratiListu(OleDbDataReader citac);
 }

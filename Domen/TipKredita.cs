@@ -47,51 +47,23 @@ namespace Domen
         #endregion
 
         #region Metode
-        public string VratiPK()
+        public string PostaviVrednostAtributa(string sifraJakog = "")
         {
-            return String.Format(" {0}, ", Convert.ToString(this.id));
+            return String.Format(Konstante.TabelaTipKredita.TABELA_TIP_KREDITA_POSTAVI, this.naziv, this.minDug, this.maksDug, this.vremenskiOkvir);
         }
 
-        public string VratiNazivTabele()
+        public string VratiKriterijumJakog(string sifraJakog = "")
         {
-            return Konstante.TabelaTipKredita.NAZIV_TABELE;
+            return String.Empty;
         }
 
-        public string VratiVrednostiZaUbacivanje()
+        public List<IDomenskiObjekat> VratiListu(ref MySqlDataReader citac)
         {
-            return String.Format(Konstante.TabelaTipKredita.TABELA_TIP_KREDITA_UBACI, this.id, this.naziv, this.minDug, this.maksDug, this.vremenskiOkvir);
-        }
+            List<IDomenskiObjekat> lista = new List<IDomenskiObjekat>();
 
-        public string VratiUslovZaNadjiSlog()
-        {
-            return Konstante.TabelaTipKredita.POLJE_NAZIV + "='" + Naziv + "'";
-        }
-
-        public string VratiAtributPretrazivanja()
-        {
-            return Konstante.TabelaTipKredita.PK_TIP_KREDITA_ID;
-        }
-
-        public string PostaviVrednostAtributa()
-        {
-            return String.Format(Konstante.TabelaTipKredita.TABELA_TIP_KREDITA_POSTAVI, this.id, this.naziv, this.minDug, this.maksDug, this.vremenskiOkvir);
-        }
-
-        public void PostaviPocetniBroj(ref IDomenskiObjekat objekat)
-        {
-            (objekat as TipKredita).ID = 0;
-        }
-
-        public void PovecajBroj(MySqlDataReader citac, ref IDomenskiObjekat objekat)
-        {
-            (objekat as TipKredita).ID = Convert.ToInt64(citac[Konstante.TabelaTipKredita.PK_TIP_KREDITA_ID]) + 1;
-        }
-
-        public bool Napuni(MySqlDataReader citac, ref IDomenskiObjekat objekat)
-        {
-            try
+            while (citac.Read())
             {
-                objekat = new TipKredita()
+                TipKredita tipKredita = new TipKredita
                 {
                     ID = Convert.ToInt64(citac["tip_kredita_id"]),
                     Naziv = Convert.ToString(citac["naziv"]),
@@ -99,37 +71,46 @@ namespace Domen
                     MaksDug = Convert.ToDouble(citac["max_dug"]),
                     VremenskiOkvir = (VremenskiOkvir)Enum.Parse(typeof(VremenskiOkvir), Convert.ToString(citac["vremenski_okvir"]), true)
                 };
-                return true;
-
+                lista.Add(tipKredita);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.StackTrace);
-                return false;
-            }
+
+            return lista;
         }
 
-        public bool ImaVezaniObjekat()
+        public string VratiNazivPK()
         {
-            return false;
+            return Konstante.TabelaAktiviraniKredit.PK_AK_ID;
         }
 
-        public IDomenskiObjekat vratiAgregiraniObjekat()
+        public string VratiNazivTabele()
         {
-            return new AktiviraniKredit();
+            return Konstante.TabelaTipKredita.NAZIV_TABELE;
         }
 
-        #region Neimplementirane
-        public string VratiVrednostiZaJoin()
+        public string VratiPK()
         {
-            throw new NotImplementedException();
+            return String.Format(" {0}, ", Convert.ToString(this.id));
         }
 
-        public string VratiUslovZaNadjiSlogove()
+        public string VratiPKIUslov(string sifraJakog = "")
         {
-            throw new NotImplementedException();
+            return String.Format("{0} = '{1}'", Konstante.TabelaAktiviraniKredit.PK_AK_ID, Convert.ToString(this.id));
         }
-        #endregion
+
+        public string VratiUslovZaNadjiSlog()
+        {
+            return this.naziv;
+        }
+
+        public string VratiVrednostiZaJoin(String sifraJakog = "")
+        {
+            return String.Empty;
+        }
+
+        public string VratiVrednostiZaUbacivanje(string sifraJakog = "")
+        {
+            return String.Format(Konstante.TabelaTipKredita.TABELA_TIP_KREDITA_UBACI, this.id, this.naziv, this.minDug, this.maksDug, this.vremenskiOkvir);
+        }
         #endregion
 
         public override string ToString()

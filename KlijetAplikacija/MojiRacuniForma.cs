@@ -16,7 +16,6 @@ namespace KlijetAplikacija
     {
         public const String RACUNI_NE_POSTOJE_KRIJERIJUM = "Računi za kriterijum <{0}> ne postoje!";
 
-        private List<Racun> racuniKlijenta;
         private GlavnaFormaKlijent glavnaFormaKlijent;
         private KontrolerRacuni kontrolerRacuni;
 
@@ -25,10 +24,8 @@ namespace KlijetAplikacija
             InitializeComponent();
             this.glavnaFormaKlijent = glavnaForma;
             this.kontrolerRacuni = new KontrolerRacuni();
-            this.racuniKlijenta = new List<Racun>();
 
             dgvMojiRacuni.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            dgvMojiRacuni.DataSource = new BindingList<Racun>(racuniKlijenta);
         }
 
         public void OsveziTabeluRacuna(List<Racun> racuni)
@@ -38,8 +35,10 @@ namespace KlijetAplikacija
 
         public void PostaviSveRacune(List<Racun> racuni)
         {
-            racuniKlijenta = racuni;
-            OsveziTabeluRacuna(racuniKlijenta);
+            if ( racuni != null )
+            {
+                OsveziTabeluRacuna(racuni);
+            }
         }
 
         public void PrikaziInfoPoruku(String poruka)
@@ -61,21 +60,31 @@ namespace KlijetAplikacija
 
         private void txtPretraga_TextChanged(object sender, EventArgs e)
         {
-            List<Racun> filter = racuniKlijenta.Where(racun => racun.BrojRacuna.Contains(txtPretraga.Text)).ToList<Racun>();
-
-            if (filter == null)
-            {
-                PrikaziGreskaPoruku(String.Format(RACUNI_NE_POSTOJE_KRIJERIJUM, txtPretraga.Text));
-            }
-            else
-            {
-                OsveziTabeluRacuna(filter);
-            }
+           
         }
 
         private void MojiRacuniForma_FormClosed(object sender, FormClosedEventArgs e)
         {
             glavnaFormaKlijent.Show();
+        }
+
+        private void txtPretraga_Leave(object sender, EventArgs e)
+        {
+
+            if ( String.IsNullOrEmpty(txtPretraga.Text) )
+            {
+                return;
+            }
+
+            List<Racun> filter = kontrolerRacuni.PrikaziRacuneSaKriterijumom(this, txtPretraga.Text);
+
+            if (filter == null && !String.IsNullOrEmpty(txtPretraga.Text))
+            {
+                PrikaziGreskaPoruku(String.Format(RACUNI_NE_POSTOJE_KRIJERIJUM, txtPretraga.Text));
+                return;
+            }
+
+            OsveziTabeluRacuna(filter);
         }
     }
 }

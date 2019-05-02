@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data.SqlClient;
-using System.Globalization;
 
 namespace Domen
 {
@@ -45,9 +43,38 @@ namespace Domen
         #endregion
 
         #region Metode
-        public string VratiPK()
+        public string PostaviVrednostAtributa(string sifraJakog = "")
         {
-            return String.Format(" {0}, ", Convert.ToString(this.id));
+            return String.Format(Konstante.TabelaRacun.TABELA_RACUN_POSTAVI, this.brojRacuna, this.tip, this.datumKreiranja.ToString(Konstante.SQL.FORMAT_DATUMA));
+        }
+
+        public string VratiKriterijumJakog(string sifraJakog = "")
+        {
+            return String.Format(Konstante.TabelaKlijent.PK_KLIJENT_ID +  " = '{0}'", sifraJakog);
+        }
+
+        public List<IDomenskiObjekat> VratiListu(ref MySqlDataReader citac)
+        {
+            List<IDomenskiObjekat> lista = new List<IDomenskiObjekat>();
+
+            while (citac.Read())
+            {
+                Racun racun = new Racun
+                {
+                    ID = Convert.ToInt64(citac["racun_id"]),
+                    BrojRacuna = Convert.ToString(citac["broj_racuna"]),
+                    Tip = (TipRacuna)Enum.Parse(typeof(TipRacuna), Convert.ToString(citac["tip_racuna"]), true),
+                    DatumKreiranja = DateTime.Parse(Convert.ToString(citac["datum_kreiranja"]))
+                };
+                lista.Add(racun);
+            }
+
+            return lista;
+        }
+
+        public string VratiNazivPK()
+        {
+            return Konstante.TabelaRacun.PK_RACUN_ID;
         }
 
         public string VratiNazivTabele()
@@ -55,70 +82,36 @@ namespace Domen
             return Konstante.TabelaRacun.NAZIV_TABELE;
         }
 
-        public string VratiVrednostiZaUbacivanje()
+        public string VratiPK()
         {
-            return String.Format(Konstante.TabelaRacun.TABELA_RACUN_UBACI, this.id, this.brojRacuna, this.tip, this.datumKreiranja.ToString(Konstante.SQL.FORMAT_DATUMA));
+            return String.Format(" {0}, ", Convert.ToString(this.id));
+        }
+
+        public string VratiPKIUslov(string sifraJakog = "")
+        {
+            return String.Format("{0} AND {1} = '{2}'", this.VratiKriterijumJakog(sifraJakog),  Konstante.TabelaRacun.PK_RACUN_ID, Convert.ToString(this.id));
         }
 
         public string VratiUslovZaNadjiSlog()
         {
-            return Konstante.TabelaRacun.POLJE_BROJ + " LIKE '*" + BrojRacuna + "*'";
+            return this.brojRacuna;
         }
 
-        public string VratiAtributPretrazivanja()
+        public string VratiVrednostiZaJoin(String sifraJakog = "")
         {
-            return Konstante.TabelaRacun.PK_RACUN_ID;
+            return String.Empty;
         }
 
-        public string PostaviVrednostAtributa()
+        public string VratiVrednostiZaUbacivanje(string sifraJakog = "")
         {
-            return String.Format(Konstante.TabelaRacun.TABELA_RACUN_POSTAVI, this.id, this.brojRacuna, this.tip, this.datumKreiranja.ToString(Konstante.SQL.FORMAT_DATUMA));
-        }
-
-        public void PostaviPocetniBroj(ref IDomenskiObjekat objekat)
-        {
-            (objekat as Racun).ID = 0;
-        }
-
-        public void PovecajBroj(MySqlDataReader citac, ref IDomenskiObjekat objekat)
-        {
-            (objekat as Racun).ID = Convert.ToInt64(citac[Konstante.TabelaRacun.PK_RACUN_ID]) + 1;
-        }
-
-        public bool Napuni(MySqlDataReader citac, ref IDomenskiObjekat objekat)
-        {
-            try
-            {
-                if (citac.Read())
-                {
-                    objekat = new Racun()
-                    {
-                        ID = Convert.ToInt64(citac["racun_id"] as String),
-                        BrojRacuna = citac["broj_racuna"] as String,
-                        Tip = (TipRacuna)Enum.Parse(typeof(TipRacuna), citac["tip_racuna"] as String, true),
-                        DatumKreiranja = DateTime.Parse(Convert.ToString(citac["datum_kreiranja"]))
-                    };
-                    return true;
-                }
-                return false;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.StackTrace);
-                return false;
-            }
-        }
-
-        public bool ImaVezaniObjekat()
-        {
-            return false;
-        }
-
-        public string VratiUslovZaNadjiSlogove()
-        {
-            throw new NotImplementedException();
+            return String.Format(Konstante.TabelaRacun.TABELA_RACUN_UBACI, sifraJakog, this.id, this.brojRacuna, this.tip, this.datumKreiranja.ToString(Konstante.SQL.FORMAT_DATUMA));
         }
         #endregion
+
+        public override string ToString()
+        {
+            return this.brojRacuna + Konstante.Opste.ZAREZ + this.tip.ToString();
+        }
     }
 
     public enum TipRacuna

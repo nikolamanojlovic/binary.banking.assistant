@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 namespace Domen
 {
     [Serializable]
-    public class AktiviraniKredit : IDomenskiAgregiraniObjekat, IDomenskiSlozeniObjekat
+    public class AktiviraniKredit : IDomenskiObjekat
     {
         private Klijent klijent;
         private TipKredita tipKredita;
@@ -17,16 +17,9 @@ namespace Domen
         private DateTime datumIsplate;
         private double kamata;
         private int brojRata;
-        private List<Rata> rata;
+        private double iznos;
 
-        #region Get, Set
-        [Browsable(false)]
-        public List<Rata> Rata
-        {
-            get { return rata; }
-            set { rata = value; }
-        }
-
+        #region Get, Sets
         public double Kamata
         {
             get { return kamata; }
@@ -81,12 +74,80 @@ namespace Domen
             get { return brojRata; }
             set { brojRata = value; }
         }
+
+        [DisplayName("Iznos")]
+        public double Iznos
+        {
+            get { return iznos; }
+            set { iznos = value; }
+        }
         #endregion
 
         #region Metode
-        public string VratiPK()
+        public string PostaviVrednostAtributa(string sifraJakog = "")
         {
-            return String.Join(" {0}, {1}, {2}, ", new string[] { Convert.ToString(this.klijent.ID), Convert.ToString(this.tipKredita.ID), Convert.ToString(brKredita) });
+            return String.Format(Konstante.TabelaAktiviraniKredit.TABELA_KLIJENT_POSTAVI, this.datumIsplate.ToString(Konstante.SQL.FORMAT_DATUMA), this.rokDospeca.ToString(Konstante.SQL.FORMAT_DATUMA),
+                                                                                          this.datumIsplate.ToString(Konstante.SQL.FORMAT_DATUMA), this.kamata, this.brojRata);
+        }
+
+        public string VratiKriterijumJakog(string sifraJakog = "")
+        {
+            return String.Format(Konstante.SQL.OR, new String[]
+            {
+                String.Format("{0} = '{1}'", Konstante.TabelaKlijent.NAZIV_TABELE + Konstante.Opste.TACKA + Konstante.TabelaKlijent.PK_KLIJENT_ID, sifraJakog),
+                String.Format("{0} = '{1}'", Konstante.TabelaTipKredita.NAZIV_TABELE + Konstante.Opste.TACKA + Konstante.TabelaTipKredita.PK_TIP_KREDITA_ID, sifraJakog)
+            });
+        }
+
+        public List<IDomenskiObjekat> VratiListu(ref MySqlDataReader citac)
+        {
+            List<IDomenskiObjekat> lista = new List<IDomenskiObjekat>();
+
+            while (citac.Read())
+            {
+                Klijent klijent = new Klijent
+                {
+                    ID = Convert.ToInt64(citac["klijent_id"]),
+                    JMBG = Convert.ToString(citac["jmbg"]),
+                    Ime = Convert.ToString(citac["ime"]),
+                    Prezime = Convert.ToString(citac["prezime"]),
+                    Mejl = Convert.ToString(citac["mejl"]),
+                    Telefon = Convert.ToString(citac["telefon"]),
+                    Sifra = Convert.ToString(citac["sifra"]),
+                    Ulica = Convert.ToString(citac["ulica"]),
+                    BrojKuce = Convert.ToInt32(citac["broj_kuce"]),
+                    Grad = Convert.ToString(citac["grad"])
+                };
+
+                TipKredita tipKredita = new TipKredita
+                {
+                    ID = Convert.ToInt64(citac["tip_kredita_id"]),
+                    Naziv = Convert.ToString(citac["naziv"]),
+                    MinDug = Convert.ToDouble(citac["min_dug"]),
+                    MaksDug = Convert.ToDouble(citac["max_dug"]),
+                    VremenskiOkvir = (VremenskiOkvir)Enum.Parse(typeof(VremenskiOkvir), Convert.ToString(citac["vremenski_okvir"]), true)
+                };
+
+                AktiviraniKredit ak = new AktiviraniKredit()
+                {
+                    Klijent = klijent,
+                    TipKredita = tipKredita,
+                    BRKredita = Convert.ToInt32(citac["broj_kredita"]),
+                    DatumUzimanja = DateTime.Parse(Convert.ToString(citac["datum_uzimanja"])),
+                    RokDospeca = DateTime.Parse(Convert.ToString(citac["rok_dospeca"])),
+                    kamata = Convert.ToDouble(citac["kamata"]),
+                    brojRata = Convert.ToInt32(citac["broj_rata"])
+                };
+
+                lista.Add(ak);
+            }
+
+            return lista;
+        }
+
+        public string VratiNazivPK()
+        {
+            return Konstante.TabelaAktiviraniKredit.PK_AK_ID;
         }
 
         public string VratiNazivTabele()
@@ -94,139 +155,52 @@ namespace Domen
             return Konstante.TabelaAktiviraniKredit.NAZIV_TABELE;
         }
 
-        public string VratiVrednostiZaUbacivanje()
+        public string VratiPK()
         {
-            return String.Format(Konstante.TabelaAktiviraniKredit.TABELA_AK_UBACI, this.klijent.ID, this.tipKredita.ID, this.brKredita, this.datumIsplate.ToString(Konstante.SQL.FORMAT_DATUMA),
-                                this.rokDospeca.ToString(Konstante.SQL.FORMAT_DATUMA), this.datumIsplate.ToString(Konstante.SQL.FORMAT_DATUMA), this.kamata, this.brojRata);
+            return Convert.ToString(this.brKredita);
+        }
+
+        public string VratiPKIUslov(string sifraJakog = "")
+        {
+            return String.Format("{0} AND {1} = '{2}'", this.VratiKriterijumJakog(sifraJakog) ,Konstante.TabelaAktiviraniKredit.PK_AK_ID, Convert.ToString(this.brKredita));
         }
 
         public string VratiUslovZaNadjiSlog()
         {
-            return Konstante.TabelaAktiviraniKredit.PK_AK_ID + "='" + BRKredita + "'";
+            return Convert.ToString(this.rokDospeca);
         }
 
-        public string VratiAtributPretrazivanja()
+        public string VratiVrednostiZaJoin(String sifraJakog = "")
         {
-            return Konstante.TabelaAktiviraniKredit.PK_AK_ID + "='" + BRKredita + "'";
-        }
-
-        public string PostaviVrednostAtributa()
-        {
-            return String.Format(Konstante.TabelaKlijent.TABELA_KLIJENT_POSTAVI, this.klijent.ID, this.tipKredita.ID, this.brKredita, this.datumIsplate.ToString(Konstante.SQL.FORMAT_DATUMA),
-                                this.rokDospeca.ToString(Konstante.SQL.FORMAT_DATUMA), this.datumIsplate.ToString(Konstante.SQL.FORMAT_DATUMA), this.kamata, this.brojRata);
-        }
-
-        public void PostaviPocetniBroj(ref IDomenskiObjekat objekat)
-        {
-            (objekat as AktiviraniKredit).BRKredita = 0;
-        }
-
-        public void PovecajBroj(MySqlDataReader citac, ref IDomenskiObjekat objekat)
-        {
-            (objekat as AktiviraniKredit).BRKredita = Convert.ToInt32(citac[Konstante.TabelaAktiviraniKredit.PK_AK_ID]) + 1;
-        }
-
-        public bool Napuni(MySqlDataReader citac, ref IDomenskiObjekat objekat)
-        {
-            try
+            return String.Join(" ", new String[] 
             {
-                IDomenskiObjekat k = new Klijent();
-                k.Napuni(citac, ref k);
-
-                IDomenskiObjekat tk = new TipKredita();
-                tk.Napuni(citac, ref tk);
-
-                objekat = new AktiviraniKredit()
-                {
-                    Klijent = k as Klijent,
-                    TipKredita = tk as TipKredita,
-                    BRKredita = Convert.ToInt32(citac["broj_kredita"] as String),
-                    DatumUzimanja = DateTime.Parse(Convert.ToString(citac["datum_uzimanja"])),
-                    RokDospeca = DateTime.Parse(Convert.ToString(citac["rok_dospeca"])),
-                    kamata = Convert.ToDouble(citac["kamata"]),
-                    brojRata = Convert.ToInt32(citac["broj_rata"])
-                };
-
-                try
-                {
-                    (objekat as AktiviraniKredit).DatumIsplate = DateTime.Parse(Convert.ToString(citac["datum_isplate"]));
-                }
-                catch (FormatException ex)
-                {
-                    (objekat as AktiviraniKredit).DatumIsplate = DateTime.MaxValue;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.StackTrace);
-                return false;
-            }
-            return true;
-        }
-
-        public bool ImaVezaniObjekat()
-        {
-            return true;
-        }
-
-        #region Metode vezane za slab objekat
-        public string VratiUslovZaNadjiSlogove()
-        {
-            return Konstante.TabelaKlijent.PK_KLIJENT_ID + "='" + Klijent.ID + "'" + Konstante.SQL.AND + Konstante.TabelaTipKredita.PK_TIP_KREDITA_ID + "='" + TipKredita.ID +
-                   Konstante.SQL.AND + Konstante.TabelaAktiviraniKredit.PK_AK_ID + "='" + BRKredita + "'";
-        }
-
-        public IDomenskiObjekat VratiVezaniObjekat()
-        {
-            return new Rata();
-        }
-
-        public List<IDomenskiObjekat> VratiVezaneObjekte()
-        {
-            return new List<IDomenskiObjekat>(this.Rata);
-        }
-
-        public bool NapuniVezaneObjekte(MySqlDataReader citac, ref IDomenskiObjekat objekat)
-        {
-            try
-            {
-                while (citac.Read())
-                {
-                    IDomenskiObjekat r = new Rata();
-                    r.Napuni(citac, ref r);
-                    (objekat as AktiviraniKredit).Rata.Add(r as Rata);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.StackTrace);
-                return false;
-            }
-            return true;
-        }
-
-        public string VratiVrednostiZaJoin()
-        {
-            return String.Join(" ", new String[]
-            {
-                String.Format(Konstante.SQL.JOIN, new String[]
+                String.Format(Konstante.SQL.JOIN, new String[] 
                 {
                     Konstante.TabelaKlijent.NAZIV_TABELE,
-                    Konstante.TabelaKlijent.PK_KLIJENT_ID + "='" + Klijent.ID + "' "
+                    String.Format(" {0} = {1} ", new String[]
+                    {
+                        Konstante.TabelaKlijent.NAZIV_TABELE + Konstante.Opste.TACKA + Konstante.TabelaKlijent.PK_KLIJENT_ID,
+                        Konstante.TabelaAktiviraniKredit.NAZIV_TABELE + Konstante.Opste.TACKA + Konstante.TabelaKlijent.PK_KLIJENT_ID
+                    })
                 }),
-                String.Format(Konstante.SQL.JOIN, new String[]
+                String.Format(Konstante.SQL.JOIN, new String[] 
                 {
                     Konstante.TabelaTipKredita.NAZIV_TABELE,
-                    Konstante.TabelaTipKredita.PK_TIP_KREDITA_ID + "='" + TipKredita.ID + "' "
+                    String.Format(" {0} = {1} ", new String[]
+                    {
+                        Konstante.TabelaTipKredita.NAZIV_TABELE + Konstante.Opste.TACKA + Konstante.TabelaTipKredita.PK_TIP_KREDITA_ID,
+                        Konstante.TabelaAktiviraniKredit.NAZIV_TABELE + Konstante.Opste.TACKA + Konstante.TabelaTipKredita.PK_TIP_KREDITA_ID
+                    })
                 })
             });
         }
 
-        public IDomenskiObjekat VratiAgregiraniObjekat()
+        public string VratiVrednostiZaUbacivanje(string sifraJakog = "")
         {
-            throw new NotImplementedException();
+            return String.Format(Konstante.TabelaAktiviraniKredit.TABELA_AK_UBACI, this.klijent.ID, this.tipKredita.ID, this.brKredita, this.datumUzimanja.ToString(Konstante.SQL.FORMAT_DATUMA),
+                                                                                   this.rokDospeca.ToString(Konstante.SQL.FORMAT_DATUMA), this.datumIsplate.ToString(Konstante.SQL.FORMAT_DATUMA), 
+                                                                                   this.kamata, this.brojRata, this.iznos);
         }
-        #endregion
         #endregion
     }
 }

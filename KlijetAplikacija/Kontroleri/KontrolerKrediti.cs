@@ -31,14 +31,11 @@ namespace KlijetAplikacija.Kontroleri
                 }
                 else
                 {
-                    List<AktiviraniKredit> krediti = new List<AktiviraniKredit>();
-                    ((List<IDomenskiObjekat>)odgovor.Objekat).ForEach(kredit => krediti.Add((AktiviraniKredit)kredit));
-                    mojiKreditiForma.PostaviSveKredite(krediti);
+                    mojiKreditiForma.PostaviSveKredite( ((List<IDomenskiObjekat>)odgovor.Objekat).ConvertAll(x => (AktiviraniKredit)x) );
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.StackTrace);
                 mojiKreditiForma.PrikaziGreskaPoruku(Konstante.Server.SERVER_NIJE_DOSTUPAN);
             }
         }

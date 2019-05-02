@@ -63,7 +63,6 @@ namespace KlijetAplikacija.Kontroleri
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.StackTrace);
                 prijavaForma.PrikaziGreskaPoruku(Konstante.Server.SERVER_NIJE_DOSTUPAN);
             }
         }

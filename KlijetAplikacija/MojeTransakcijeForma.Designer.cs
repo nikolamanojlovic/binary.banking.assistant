@@ -34,6 +34,9 @@
             this.chbIsplate = new System.Windows.Forms.CheckBox();
             this.chbUplateKredita = new System.Windows.Forms.CheckBox();
             this.chbIsplateKredita = new System.Windows.Forms.CheckBox();
+            this.cbRacuni = new System.Windows.Forms.ComboBox();
+            this.lblRacun = new System.Windows.Forms.Label();
+            this.btnPrikazi = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMojeTransakije)).BeginInit();
             this.SuspendLayout();
             // 
@@ -84,41 +87,72 @@
             // 
             this.chbUplateKredita.AllowDrop = true;
             this.chbUplateKredita.AutoSize = true;
-            this.chbUplateKredita.Checked = true;
-            this.chbUplateKredita.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chbUplateKredita.Location = new System.Drawing.Point(558, 80);
             this.chbUplateKredita.Name = "chbUplateKredita";
             this.chbUplateKredita.Size = new System.Drawing.Size(92, 17);
             this.chbUplateKredita.TabIndex = 7;
             this.chbUplateKredita.Text = "Uplate kredita";
             this.chbUplateKredita.UseVisualStyleBackColor = true;
+            this.chbUplateKredita.Visible = false;
             // 
             // chbIsplateKredita
             // 
             this.chbIsplateKredita.AllowDrop = true;
             this.chbIsplateKredita.AutoSize = true;
-            this.chbIsplateKredita.Checked = true;
-            this.chbIsplateKredita.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chbIsplateKredita.Location = new System.Drawing.Point(558, 103);
             this.chbIsplateKredita.Name = "chbIsplateKredita";
             this.chbIsplateKredita.Size = new System.Drawing.Size(92, 17);
             this.chbIsplateKredita.TabIndex = 8;
             this.chbIsplateKredita.Text = "Isplate kredita";
             this.chbIsplateKredita.UseVisualStyleBackColor = true;
+            this.chbIsplateKredita.Visible = false;
+            // 
+            // cbRacuni
+            // 
+            this.cbRacuni.FormattingEnabled = true;
+            this.cbRacuni.Location = new System.Drawing.Point(558, 151);
+            this.cbRacuni.Name = "cbRacuni";
+            this.cbRacuni.Size = new System.Drawing.Size(121, 21);
+            this.cbRacuni.TabIndex = 9;
+            // 
+            // lblRacun
+            // 
+            this.lblRacun.AutoSize = true;
+            this.lblRacun.Location = new System.Drawing.Point(555, 135);
+            this.lblRacun.Name = "lblRacun";
+            this.lblRacun.Size = new System.Drawing.Size(44, 13);
+            this.lblRacun.TabIndex = 10;
+            this.lblRacun.Text = "Računi:";
+            // 
+            // btnPrikazi
+            // 
+            this.btnPrikazi.Location = new System.Drawing.Point(558, 183);
+            this.btnPrikazi.Name = "btnPrikazi";
+            this.btnPrikazi.Size = new System.Drawing.Size(75, 23);
+            this.btnPrikazi.TabIndex = 11;
+            this.btnPrikazi.Text = "Prikaži";
+            this.btnPrikazi.UseVisualStyleBackColor = true;
+            this.btnPrikazi.Click += new System.EventHandler(this.btnPrikazi_Click);
             // 
             // MojeTransakcijeForma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(688, 456);
+            this.Controls.Add(this.btnPrikazi);
+            this.Controls.Add(this.lblRacun);
+            this.Controls.Add(this.cbRacuni);
             this.Controls.Add(this.chbIsplateKredita);
             this.Controls.Add(this.chbUplateKredita);
             this.Controls.Add(this.chbIsplate);
             this.Controls.Add(this.chbUplate);
             this.Controls.Add(this.lblFilteri);
             this.Controls.Add(this.dgvMojeTransakije);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MojeTransakcijeForma";
             this.Text = "MojeTransakcijeForma";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MojeTransakcijeForma_FormClosed);
+            this.Load += new System.EventHandler(this.MojeTransakcijeForma_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvMojeTransakije)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -133,5 +167,8 @@
         private System.Windows.Forms.CheckBox chbIsplate;
         private System.Windows.Forms.CheckBox chbUplateKredita;
         private System.Windows.Forms.CheckBox chbIsplateKredita;
+        private System.Windows.Forms.ComboBox cbRacuni;
+        private System.Windows.Forms.Label lblRacun;
+        private System.Windows.Forms.Button btnPrikazi;
     }
 }

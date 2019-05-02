@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace Sesija
 {
@@ -40,10 +41,7 @@ namespace Sesija
 
         public void ZatvoriKonekciju()
         {
-            if (Konekcija != null && Konekcija.State == ConnectionState.Open)
-            {
-                Konekcija.Close();
-            }
+            Konekcija.Close();
         }
 
         public void ZapocniTransakciju()
@@ -64,7 +62,7 @@ namespace Sesija
 
         public void ZatvoriCitac()
         {
-            if (!Citac.IsClosed)
+            if (Citac != null && !Citac.IsClosed)
             {
                 Citac.Close();
             }
@@ -72,18 +70,17 @@ namespace Sesija
         #endregion
 
         #region Operacije nad bazom
-        public bool PamtiSlog(IDomenskiObjekat odo)
+        public bool PamtiSlog(IDomenskiObjekat odo, String sifraJakog = "")
         {
             try
             {
                 Komanda.CommandText = Konstante.SQL.INSERT_INTO + odo.VratiNazivTabele() +
-                                      String.Format(Konstante.SQL.VALUES, odo.VratiVrednostiZaUbacivanje());
+                                      String.Format(Konstante.SQL.VALUES, odo.VratiVrednostiZaUbacivanje(sifraJakog));
                 Komanda.CommandType = CommandType.Text;
                 Komanda.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.StackTrace);
                 return false;
             }
             return true;
@@ -93,14 +90,29 @@ namespace Sesija
         {
             try
             {
-                Komanda.CommandText = String.Format(Konstante.SQL.DELETE_FROM, Konstante.SQL.ALL) + odo.VratiNazivTabele() +
-                                      String.Format(Konstante.SQL.WHERE, odo.VratiUslovZaNadjiSlog());
+                Komanda.CommandText = String.Format(Konstante.SQL.DELETE_FROM, odo.VratiNazivTabele()) +
+                                      String.Format(Konstante.SQL.WHERE, odo.VratiPKIUslov());
                 Komanda.CommandType = CommandType.Text;
                 Komanda.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.StackTrace);
+                return false;
+            }
+            return true;
+        }
+
+        public bool BrisiSlabeSlogove(IDomenskiObjekat odo, String sifraJakog)
+        {
+            try
+            {
+                Komanda.CommandText = String.Format(Konstante.SQL.DELETE_FROM, odo.VratiNazivTabele()) +
+                                      String.Format(Konstante.SQL.WHERE, odo.VratiPKIUslov(sifraJakog));
+                Komanda.CommandType = CommandType.Text;
+                Komanda.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
                 return false;
             }
             return true;
@@ -111,71 +123,19 @@ namespace Sesija
             try
             {
                 Komanda.CommandText = Konstante.SQL.UPDATE + odo.VratiNazivTabele() +
-                                      String.Format(Konstante.SQL.SET, odo.PostaviVrednostAtributa());
+                                      String.Format(Konstante.SQL.SET, odo.PostaviVrednostAtributa()) +
+                                      String.Format(Konstante.SQL.WHERE, odo.VratiPKIUslov());
                 Komanda.CommandType = CommandType.Text;
                 Komanda.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.StackTrace);
                 return false;
             }
             return true;
         }
 
-        public bool DaLiPostojiSlog(IDomenskiObjekat odo)
-        {
-            bool signal = true;
-            try
-            {
-                Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, Konstante.SQL.ALL) + odo.VratiNazivTabele() +
-                                      String.Format(Konstante.SQL.WHERE, odo.VratiUslovZaNadjiSlog());
-                Komanda.CommandType = CommandType.Text;
-                Citac = Komanda.ExecuteReader();
-                signal = Citac.HasRows;
-                Poruka = signal ? Konstante.DB.SLOG_POSTOJI : Konstante.DB.SLOG_NE_POSTOJI;
-            }
-            catch (Exception ex)
-            {
-                Poruka = Konstante.DB.NAUSPESNO_PRETRAZIVANJE;
-                Console.WriteLine(ex.StackTrace);
-                return false;
-            }
-            return signal;
-        }
-
-        public bool KreirajSlog(IDomenskiObjekat odo)
-        {
-            try
-            {
-                Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, String.Format(Konstante.SQL.MAX, odo.VratiAtributPretrazivanja())) +
-                                      odo.VratiNazivTabele();
-                Komanda.CommandType = CommandType.Text;
-                Citac = Komanda.ExecuteReader();
-
-                if (Citac.HasRows)
-                {
-                    odo.PostaviPocetniBroj(ref odo);
-                }
-                else
-                {
-                    odo.PovecajBroj(Citac, ref odo);
-                }
-
-                Komanda.CommandText = Konstante.SQL.INSERT_INTO + odo.VratiNazivTabele() +
-                                      String.Format(Konstante.SQL.VALUES, odo.VratiVrednostiZaUbacivanje());
-                Komanda.CommandType = CommandType.Text;
-                Komanda.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.StackTrace);
-                return false;
-            }
-            return true;
-        }
-
-        public IDomenskiObjekat NadjiSlogIVratiGa(IDomenskiObjekat odo)
+        public IDomenskiObjekat VratiSlog(IDomenskiObjekat odo)
         {
             try
             {
@@ -183,97 +143,160 @@ namespace Sesija
                                       String.Format(Konstante.SQL.WHERE, odo.VratiUslovZaNadjiSlog());
                 Komanda.CommandType = CommandType.Text;
                 Citac = Komanda.ExecuteReader();
-
-                if (!Citac.HasRows)
-                {
-                    Poruka = Konstante.DB.SLOG_NE_POSTOJI;
-                    return null;
-                }
-
-                if (Citac.Read())
-                {
-                    odo.Napuni(Citac, ref odo);
-                }
-                Poruka = Konstante.DB.SLOG_POSTOJI;
+                return odo.VratiListu(ref Citac).FirstOrDefault();
             }
             catch (Exception ex)
             {
                 Poruka = Konstante.DB.NAUSPESNO_PRETRAZIVANJE;
-                Console.WriteLine(ex.Message);
-                Console.WriteLine(ex.StackTrace);
                 return null;
             }
-            return odo;
         }
 
-        public List<IDomenskiObjekat> NadjiVezaneSlogoveIVratiIh(IDomenskiObjekat odo)
-        {
-            if (odo.ImaVezaniObjekat())
-            {
-                IDomenskiObjekat slab = (odo as IDomenskiSlozeniObjekat).VratiVezaniObjekat();
-
-
-                Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, Konstante.SQL.ALL) + slab.VratiNazivTabele() +
-                String.Format(Konstante.SQL.WHERE, odo.VratiUslovZaNadjiSlogove());
-                Komanda.CommandType = CommandType.Text;
-                Citac = Komanda.ExecuteReader();
-                Poruka = (odo as IDomenskiSlozeniObjekat).NapuniVezaneObjekte(Citac, ref odo)
-                         ? Konstante.DB.VEZANI_SLOG_USPESNO_PROCITAN : Konstante.DB.VEZANI_SLOG_NEUSPESNO_PROCITAN;
-            }
-            return (odo as IDomenskiSlozeniObjekat).VratiVezaneObjekte();
-        }
-
-        public List<IDomenskiObjekat> NadjiAgregiraneSlogoveIVratiIh(IDomenskiObjekat odo)
-        {
-            List<IDomenskiObjekat> agregirani = new List<IDomenskiObjekat>();
-            IDomenskiObjekat agr = (odo as IDomenskiAgregiraniObjekat).VratiAgregiraniObjekat();
-
-            Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, Konstante.SQL.ALL) + agr.VratiNazivTabele() +
-                                  (odo as IDomenskiAgregiraniObjekat).VratiVrednostiZaJoin() +
-                                  String.Format(Konstante.SQL.WHERE, agr.VratiNazivTabele() + "." + odo.VratiUslovZaNadjiSlogove());
-            Komanda.CommandType = CommandType.Text;
-            Citac = Komanda.ExecuteReader();
-
-            while (Citac.Read())
-            {
-                IDomenskiObjekat objekat = (odo as IDomenskiAgregiraniObjekat).VratiAgregiraniObjekat();
-                objekat.Napuni(Citac, ref objekat);
-                agregirani.Add(objekat);
-            }
-            return agregirani;
-        }
-
-        public bool PamtiSlozeniSlog(IDomenskiObjekat odo)
+        public List<IDomenskiObjekat> VratiSve(IDomenskiObjekat odo)
         {
             try
             {
-                Komanda.CommandText = Konstante.SQL.INSERT_INTO + odo.VratiNazivTabele() +
-                                      String.Format(Konstante.SQL.VALUES, odo.VratiVrednostiZaUbacivanje());
+                Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, Konstante.SQL.ALL) + odo.VratiNazivTabele();
                 Komanda.CommandType = CommandType.Text;
-                Komanda.ExecuteNonQuery();
-
-                foreach (IDomenskiObjekat vezani in (odo as IDomenskiSlozeniObjekat).VratiVezaneObjekte())
-                {
-                    Komanda.CommandText = Konstante.SQL.INSERT_INTO + vezani.VratiNazivTabele() +
-                                          String.Format(Konstante.SQL.VALUES, new String[]
-                                          {
-                                              odo.VratiPK(),
-                                              vezani.VratiVrednostiZaUbacivanje()
-                                          });
-                    Komanda.CommandType = CommandType.Text;
-                    Komanda.ExecuteNonQuery();
-                }
-
-                Poruka = Konstante.DB.SLOZENI_SLOG_USPENO_ZAPAMCEN;
+                Citac = Komanda.ExecuteReader();
+                return odo.VratiListu(ref Citac);
             }
             catch (Exception ex)
             {
-                Poruka = Konstante.DB.SLOZENI_SLOG_NEUSPENO_ZAPAMCEN;
-                PonistiTransakciju();
-                Console.WriteLine(ex.StackTrace);
-                return false;
+                Poruka = Konstante.DB.NAUSPESNO_PRETRAZIVANJE;
+                return null;
             }
-            return true;
+        }
+
+        public List<IDomenskiObjekat> VratiSveSlabeObjekte(IDomenskiObjekat odo, string sifraJakog)
+        {
+            try
+            {
+                Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, Konstante.SQL.ALL) + odo.VratiNazivTabele() +
+                                      String.Format(Konstante.SQL.WHERE, odo.VratiKriterijumJakog(sifraJakog));
+                Komanda.CommandType = CommandType.Text;
+                Citac = Komanda.ExecuteReader();
+                return odo.VratiListu(ref Citac);
+            }
+            catch (Exception ex)
+            {
+                Poruka = Konstante.DB.NAUSPESNO_PRETRAZIVANJE;
+                return null;
+            }
+        }
+
+        public List<IDomenskiObjekat> VratiSveSlabeObjekteSaKriterijumom(IDomenskiObjekat odo, string kriterijum, string sifraJakog)
+        {
+            try
+            {
+                Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, Konstante.SQL.ALL) + odo.VratiNazivTabele() +
+                                      String.Format(Konstante.SQL.WHERE, String.Join(Konstante.SQL.AND, new String[] 
+                                      {
+                                            odo.VratiKriterijumJakog(sifraJakog),
+                                            kriterijum
+                                      }));
+                Komanda.CommandType = CommandType.Text;
+                Citac = Komanda.ExecuteReader();
+                return odo.VratiListu(ref Citac);
+            }
+            catch (Exception ex)
+            {
+                Poruka = Konstante.DB.NAUSPESNO_PRETRAZIVANJE;
+                return null;
+            }
+        }
+
+        public List<IDomenskiObjekat> VratiSveAgregiranebjekte(IDomenskiObjekat odo, string sifraJakog)
+        {
+            try
+            {
+                Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, Konstante.SQL.ALL) + odo.VratiNazivTabele() + odo.VratiVrednostiZaJoin(sifraJakog) +
+                                      String.Format(Konstante.SQL.WHERE, odo.VratiKriterijumJakog(sifraJakog));
+                Komanda.CommandType = CommandType.Text;
+                Citac = Komanda.ExecuteReader();
+                return odo.VratiListu(ref Citac);
+            }
+            catch (Exception ex)
+            {
+                Poruka = Konstante.DB.NAUSPESNO_PRETRAZIVANJE;
+                return null;
+            }
+        }
+
+        public List<IDomenskiObjekat> VratiSveAgregiranebjekteSaKriterijumom(IDomenskiObjekat odo, string kriterijum, string sifraJakog)
+        {
+            try
+            {
+                Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, Konstante.SQL.ALL) + odo.VratiNazivTabele() + odo.VratiVrednostiZaJoin(sifraJakog) +
+                                      String.Format(Konstante.SQL.WHERE, kriterijum);
+                Komanda.CommandType = CommandType.Text;
+                Citac = Komanda.ExecuteReader();
+                return odo.VratiListu(ref Citac);
+            }
+            catch (Exception ex)
+            {
+                Poruka = Konstante.DB.NAUSPESNO_PRETRAZIVANJE;
+                return null;
+            }
+        }
+
+        public List<IDomenskiObjekat> VratiPoKriterijumu(IDomenskiObjekat odo, string kriterijum)
+        {
+            try
+            {
+                Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, Konstante.SQL.ALL) + odo.VratiNazivTabele() +
+                                      String.Format(Konstante.SQL.WHERE, kriterijum);
+                Komanda.CommandType = CommandType.Text;
+                Citac = Komanda.ExecuteReader();
+                return odo.VratiListu(ref Citac);
+            }
+            catch (Exception ex)
+            {
+                Poruka = Konstante.DB.NAUSPESNO_PRETRAZIVANJE;
+                return null;
+            }
+        }
+
+        public String VratiID(IDomenskiObjekat odo)
+        {
+            try
+            {
+                Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, String.Format(Konstante.SQL.MAX, odo.VratiNazivPK())) +
+                                                    odo.VratiNazivTabele();
+                Komanda.CommandType = CommandType.Text;
+                Citac = Komanda.ExecuteReader();
+                if (Citac.Read())
+                {
+                    return Convert.ToString(Citac.GetInt64(0) + 1);
+                }
+                return Konstante.Opste.NULA;
+            }
+            catch (Exception ex)
+            {
+                Poruka = Konstante.DB.NAUSPESNO_PRETRAZIVANJE;
+                return Konstante.Opste.NULA;
+            }
+        }
+
+        public String VratiIDSlabog(IDomenskiObjekat odo, String kriterijum)
+        {
+            try
+            {
+                Komanda.CommandText = String.Format(Konstante.SQL.SELECT_FROM, String.Format(Konstante.SQL.MAX, odo.VratiNazivPK())) +
+                                                    odo.VratiNazivTabele() + String.Format(Konstante.SQL.WHERE, kriterijum);
+                Komanda.CommandType = CommandType.Text;
+                Citac = Komanda.ExecuteReader();
+                if (Citac.Read())
+                {
+                    return Convert.ToString(Citac.GetInt64(0) + 1);
+                }
+                return Konstante.Opste.NULA;
+            }
+            catch (Exception ex)
+            {
+                Poruka = Konstante.DB.NAUSPESNO_PRETRAZIVANJE;
+                return Konstante.Opste.NULA;
+            }
         }
         #endregion
     }
